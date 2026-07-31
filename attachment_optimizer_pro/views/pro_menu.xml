@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Pro menus are inserted under the free edition Storage Optimization menu -->
+    <!-- All Pro menus are grouped under a single "Pro Features" submenu so
+         the free edition menu header stays untouched. -->
+    <menuitem id="attachment_optimizer_pro_menu"
+              name="Pro Features"
+              parent="attachment_optimizer.storage_optimization_menu"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="20"/>
+
     <menuitem id="attachment_optimizer_pro_storage_bucket_menu"
               name="Buckets"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_storage_bucket_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="15"/>
+              sequence="10"/>
 
     <menuitem id="attachment_optimizer_pro_storage_rule_menu"
               name="Routing Rules"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_storage_rule_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="16"/>
+              sequence="20"/>
 
     <menuitem id="attachment_optimizer_pro_storage_policy_menu"
               name="Lifecycle Policies"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_storage_policy_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="17"/>
+              sequence="30"/>
 
     <menuitem id="attachment_optimizer_pro_cleanup_batch_menu"
               name="Cleanup Batches"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_cleanup_batch_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="18"/>
+              sequence="40"/>
 
     <menuitem id="attachment_optimizer_pro_restore_batch_menu"
               name="Restore Batches"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_restore_batch_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="19"/>
+              sequence="50"/>
 
     <!-- Analytics report action (bound to the Storage Optimization menu) -->
     <record id="attachment_optimizer_pro_analytics_action" model="ir.actions.server">
@@ -48,8 +55,8 @@ action = env['attachment.storage.mapping'].action_show_analytics()
 
     <menuitem id="attachment_optimizer_pro_analytics_menu"
               name="Storage Analytics"
-              parent="attachment_optimizer.storage_optimization_menu"
+              parent="attachment_optimizer_pro_menu"
               action="attachment_optimizer_pro_analytics_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
-              sequence="25"/>
+              sequence="60"/>
 </odoo>

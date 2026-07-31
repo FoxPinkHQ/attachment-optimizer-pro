@@ -13,6 +13,9 @@
     "support": "aduy000@gmail.com",
     "website": "https://github.com/FoxPinkHQ/attachment-optimizer-pro",
     "license": "LGPL-3",
+    "images": [
+        "static/description/preview.png",
+    ],
     "depends": [
         "attachment_optimizer",
         "mail",

@@ -14,7 +14,7 @@
                 <field name="res_model_id"/>
                 <field name="bucket_id" optional="show"/>
                 <field name="age_days"/>
-                <field name="schedule_enabled" widget="badge"/>
+                <field name="schedule_enabled"/>
                 <field name="last_run"/>
                 <field name="last_result" optional="show"/>
                 <field name="active"/>

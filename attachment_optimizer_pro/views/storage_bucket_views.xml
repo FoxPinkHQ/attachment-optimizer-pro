@@ -11,8 +11,7 @@
                 <field name="provider"/>
                 <field name="region"/>
                 <field name="endpoint_url" optional="show"/>
-                <field name="is_default" widget="badge"
-                       decoration-success="is_default == True"/>
+                <field name="is_default"/>
                 <field name="active"/>
             </list>
         </field>

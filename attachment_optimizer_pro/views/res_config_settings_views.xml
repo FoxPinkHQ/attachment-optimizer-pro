@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Extend the free edition settings app with Pro configuration -->
+    <!-- Extend the free edition settings app with Pro configuration.
+         The free header stays untouched; all Pro settings are grouped
+         into a single "Pro Features" block with clear sub-titles. -->
     <record id="attachment_optimizer_pro_res_config_settings" model="ir.ui.view">
         <field name="name">attachment.optimizer.pro.config.settings</field>
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="attachment_optimizer.view_attachment_optimizer_config_settings"/>
         <field name="arch" type="xml">
             <xpath expr="//app[@name='attachment_optimizer']" position="inside">
-                <div id="pro_routing">
-                    <block title="Automatic Storage Routing (Pro)" name="pro_routing_setting_container">
+                <div id="pro_features">
+                    <block title="Pro Features" name="pro_features_setting_container">
+
+                        <setting type="header" string="Automatic Routing"/>
                         <setting id="pro_routing_enabled_setting" string="Enable Automatic Storage Routing"
                                  help="Route new attachments to a bucket profile automatically based on routing rules.">
                             <field name="pro_routing_enabled"/>
@@ -17,10 +21,8 @@
                                 Storage Optimization → Routing Rules.
                             </div>
                         </setting>
-                    </block>
-                </div>
-                <div id="pro_cleanup">
-                    <block title="Safe Local Cleanup (Pro)" name="pro_cleanup_setting_container">
+
+                        <setting type="header" string="Safe Local Cleanup"/>
                         <setting id="pro_cleanup_enabled_setting" string="Enable Safe Local Cleanup"
                                  help="Reclaim filestore space from verified mappings after the retention period.">
                             <field name="pro_cleanup_enabled"/>
@@ -33,18 +35,14 @@
                                  help="After the local copy is removed, keep the mapping recoverable for this many days.">
                             <field name="pro_cleanup_quarantine_days"/>
                         </setting>
-                    </block>
-                </div>
-                <div id="pro_processing">
-                    <block title="Background Processing (Pro)" name="pro_processing_setting_container">
+
+                        <setting type="header" string="Background Processing"/>
                         <setting id="pro_concurrency_setting" string="Routing Concurrency"
                                  help="Maximum routed operations processed per cron run.">
                             <field name="pro_concurrency"/>
                         </setting>
-                    </block>
-                </div>
-                <div id="pro_alerts">
-                    <block title="Operational Alerts (Pro)" name="pro_alerts_setting_container">
+
+                        <setting type="header" string="Operational Alerts"/>
                         <setting id="pro_alert_enabled_setting" string="Enable Operational Alerts"
                                  help="Email alerts about failed queues, stuck operations and verification failures.">
                             <field name="pro_alert_enabled"/>
@@ -52,6 +50,7 @@
                         <setting id="pro_alert_email_setting" string="Alert Recipient Email">
                             <field name="pro_alert_email" placeholder="admin@example.com"/>
                         </setting>
+
                     </block>
                 </div>
             </xpath>

@@ -1,0 +1,10 @@
+/*
+!/attachment_optimizer_pro
+!/README.md
+!/LICENSE
+!/.gitignore
+
+__pycache__/
+*.pyc
+/attachment_optimizer_pro/README.md
+/attachment_optimizer_pro/LICENSE

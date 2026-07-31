@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ── List View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_cleanup_batch_tree" model="ir.ui.view">
+        <field name="name">attachment.cleanup.batch.tree</field>
+        <field name="model">attachment.cleanup.batch</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="name"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'running'"
+                       decoration-success="state == 'done'"
+                       decoration-muted="state == 'cancelled'"/>
+                <field name="retention_days"/>
+                <field name="quarantine_days"/>
+                <field name="total"/>
+                <field name="cleaned"/>
+                <field name="skipped"/>
+                <field name="failed"/>
+                <field name="reclaimed_display"/>
+                <field name="started_at"/>
+                <field name="finished_at"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_cleanup_batch_form" model="ir.ui.view">
+        <field name="name">attachment.cleanup.batch.form</field>
+        <field name="model">attachment.cleanup.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" string="Run Cleanup" type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state != 'draft'"
+                            class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fa fa-shield"/>
+                        Local filestore copies are removed <strong>only
+                        after</strong> the SHA-256 checksum matches the
+                        verified S3 object. Removed copies stay in a quarantine
+                        window and can be restored at any time.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="state" widget="badge"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="retention_days"/>
+                            <field name="quarantine_days"/>
+                            <field name="limit"/>
+                        </group>
+                    </group>
+                    <group string="Results">
+                        <group>
+                            <field name="total"/>
+                            <field name="cleaned"/>
+                            <field name="skipped"/>
+                            <field name="failed"/>
+                        </group>
+                        <group>
+                            <field name="reclaimed_display"/>
+                            <field name="started_at"/>
+                            <field name="finished_at"/>
+                        </group>
+                    </group>
+                    <group string="Processed Mappings">
+                        <field name="mapping_ids" nolabel="1">
+                            <list>
+                                <field name="attachment_id"/>
+                                <field name="cleanup_state" widget="badge"/>
+                                <field name="removed_at"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ─────────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_cleanup_batch_action" model="ir.actions.act_window">
+        <field name="name">Cleanup Batches</field>
+        <field name="res_model">attachment.cleanup.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="help">
+            Cleanup batches reclaim local filestore space from verified,
+            finalized storage mappings after the retention period.
+        </field>
+    </record>
+</odoo>

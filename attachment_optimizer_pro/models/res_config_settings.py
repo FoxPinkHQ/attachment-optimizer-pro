@@ -1,0 +1,40 @@
+from odoo import fields, models
+
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    pro_routing_enabled = fields.Boolean(
+        string='Enable Automatic Storage Routing',
+        config_parameter='attachment_storage_pro.routing_enabled',
+        default=False,
+    )
+    pro_cleanup_enabled = fields.Boolean(
+        string='Enable Safe Local Cleanup',
+        config_parameter='attachment_storage_pro.cleanup.enabled',
+        default=False,
+    )
+    pro_cleanup_retention_days = fields.Integer(
+        string='Cleanup Retention (days)',
+        config_parameter='attachment_storage_pro.cleanup.retention_days',
+        default=30,
+    )
+    pro_cleanup_quarantine_days = fields.Integer(
+        string='Cleanup Quarantine (days)',
+        config_parameter='attachment_storage_pro.cleanup.quarantine_days',
+        default=7,
+    )
+    pro_concurrency = fields.Integer(
+        string='Processing Concurrency',
+        config_parameter='attachment_storage_pro.concurrency',
+        default=10,
+    )
+    pro_alert_enabled = fields.Boolean(
+        string='Enable Operational Alerts',
+        config_parameter='attachment_storage_pro.alert.enabled',
+        default=False,
+    )
+    pro_alert_email = fields.Char(
+        string='Alert Recipient Email',
+        config_parameter='attachment_storage_pro.alert.email',
+    )

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ── List View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_restore_batch_tree" model="ir.ui.view">
+        <field name="name">attachment.restore.batch.tree</field>
+        <field name="model">attachment.restore.batch</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="name"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'running'"
+                       decoration-success="state == 'done'"
+                       decoration-muted="state == 'cancelled'"/>
+                <field name="total"/>
+                <field name="restored"/>
+                <field name="failed"/>
+                <field name="restored_display"/>
+                <field name="started_at"/>
+                <field name="finished_at"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_restore_batch_form" model="ir.ui.view">
+        <field name="name">attachment.restore.batch.form</field>
+        <field name="model">attachment.restore.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" string="Run Restore" type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state != 'draft'"
+                            class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-undo"/>
+                        Restore downloads verified objects from S3 back into
+                        the Odoo filestore, making them available again even
+                        if the S3 endpoint is unreachable.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="state" widget="badge"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="limit"/>
+                        </group>
+                    </group>
+                    <group string="Results">
+                        <group>
+                            <field name="total"/>
+                            <field name="restored"/>
+                            <field name="failed"/>
+                        </group>
+                        <group>
+                            <field name="restored_display"/>
+                            <field name="started_at"/>
+                            <field name="finished_at"/>
+                        </group>
+                    </group>
+                    <group string="Processed Mappings">
+                        <field name="mapping_ids" nolabel="1">
+                            <list>
+                                <field name="attachment_id"/>
+                                <field name="cleanup_state" widget="badge"/>
+                                <field name="restored_at"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ─────────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_restore_batch_action" model="ir.actions.act_window">
+        <field name="name">Restore Batches</field>
+        <field name="res_model">attachment.restore.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="help">
+            Restore batches re-download verified objects from S3 to the Odoo
+            filestore before rollback or uninstall.
+        </field>
+    </record>
+</odoo>

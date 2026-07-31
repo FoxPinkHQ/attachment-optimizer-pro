@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="attachment_storage_pro_routing_enabled" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.routing_enabled</field>
+            <field name="value">False</field>
+        </record>
+
+        <record id="attachment_storage_pro_cleanup_enabled" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.cleanup.enabled</field>
+            <field name="value">False</field>
+        </record>
+
+        <record id="attachment_storage_pro_cleanup_retention_days" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.cleanup.retention_days</field>
+            <field name="value">30</field>
+        </record>
+
+        <record id="attachment_storage_pro_cleanup_quarantine_days" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.cleanup.quarantine_days</field>
+            <field name="value">7</field>
+        </record>
+
+        <record id="attachment_storage_pro_concurrency" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.concurrency</field>
+            <field name="value">10</field>
+        </record>
+
+        <record id="attachment_storage_pro_alert_enabled" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.alert.enabled</field>
+            <field name="value">False</field>
+        </record>
+
+    </data>
+</odoo>

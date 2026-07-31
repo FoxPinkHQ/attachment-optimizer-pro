@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ── List View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_storage_policy_tree" model="ir.ui.view">
+        <field name="name">attachment.storage.policy.tree</field>
+        <field name="model">attachment.storage.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="action" widget="badge"
+                       decoration-info="action in ('migrate','archive')"
+                       decoration-warning="action == 'cleanup'"
+                       decoration-success="action == 'restore'"/>
+                <field name="res_model_id"/>
+                <field name="bucket_id" optional="show"/>
+                <field name="age_days"/>
+                <field name="schedule_enabled" widget="badge"/>
+                <field name="last_run"/>
+                <field name="last_result" optional="show"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form View ─────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_storage_policy_form" model="ir.ui.view">
+        <field name="name">attachment.storage.policy.form</field>
+        <field name="model">attachment.storage.policy</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" string="Run Now" type="object"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="action"/>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="batch_limit"/>
+                            <field name="last_run"/>
+                            <field name="last_result"/>
+                        </group>
+                    </group>
+                    <group string="Filter">
+                        <field name="res_model_id"/>
+                        <field name="mime_type" placeholder="application/pdf"/>
+                        <field name="min_size_kb"/>
+                        <field name="max_size_kb"/>
+                        <field name="age_days"/>
+                    </group>
+                    <group string="Action Settings">
+                        <field name="bucket_id"
+                               invisible="action not in ('migrate','archive')"
+                               required="action in ('migrate','archive')"/>
+                        <field name="retention_days"
+                               invisible="action not in ('cleanup','archive')"
+                               required="action in ('cleanup','archive')"/>
+                        <field name="quarantine_days"
+                               invisible="action not in ('cleanup','archive')"/>
+                    </group>
+                    <group string="Schedule" name="schedule">
+                        <field name="schedule_enabled"/>
+                        <field name="interval_number"
+                               invisible="not schedule_enabled"/>
+                        <field name="interval_type"
+                               invisible="not schedule_enabled"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ─────────────────────────────────────────── -->
+    <record id="attachment_optimizer_pro_storage_policy_action" model="ir.actions.act_window">
+        <field name="name">Lifecycle Policies</field>
+        <field name="res_model">attachment.storage.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="help">
+            Lifecycle policies automate migrating, restoring, cleaning up and
+            archiving attachments on a schedule.
+        </field>
+    </record>
+</odoo>

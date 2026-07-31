@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="attachment_optimizer_pro_restore_confirm_form" model="ir.ui.view">
+        <field name="name">attachment.restore.confirm.form</field>
+        <field name="model">attachment.restore.confirm</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Restore from S3">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa fa-undo"/>
+                    Verified objects will be re-downloaded from S3 back into
+                    the Odoo filestore.
+                </div>
+                <group>
+                    <field name="count"/>
+                </group>
+                <field name="mapping_ids" nolabel="1">
+                    <list>
+                        <field name="attachment_id"/>
+                        <field name="cleanup_state" widget="badge"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" string="Confirm Restore"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="attachment_optimizer_pro_restore_confirm_action" model="ir.actions.act_window">
+        <field name="name">Confirm Restore from S3</field>
+        <field name="res_model">attachment.restore.confirm</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

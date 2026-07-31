@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend the free edition mapping form with Pro lifecycle info -->
+    <record id="attachment_optimizer_pro_storage_mapping_form" model="ir.ui.view">
+        <field name="name">attachment.storage.mapping.pro.form</field>
+        <field name="model">attachment.storage.mapping</field>
+        <field name="inherit_id" ref="attachment_optimizer.attachment_optimizer_storage_mapping_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_restore_mapping" type="object"
+                        class="oe_stat_button" icon="fa-undo"
+                        invisible="cleanup_state not in ('quarantined','cleaned')">
+                    Restore to Filestore
+                </button>
+            </xpath>
+            <xpath expr="//group[field[@name='create_date']]" position="before">
+                <group string="Lifecycle (Pro)">
+                    <group>
+                        <field name="bucket_id" readonly="1"/>
+                        <field name="cleanup_state" widget="badge"
+                               decoration-success="cleanup_state == 'kept'"
+                               decoration-warning="cleanup_state == 'quarantined'"
+                               decoration-danger="cleanup_state == 'cleaned'"/>
+                    </group>
+                    <group>
+                        <field name="removed_at" readonly="1"/>
+                        <field name="restored" readonly="1"/>
+                        <field name="restored_at" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend the free edition migration operation form -->
+    <record id="attachment_optimizer_pro_migration_operation_form" model="ir.ui.view">
+        <field name="name">attachment.migration.operation.pro.form</field>
+        <field name="model">attachment.migration.operation</field>
+        <field name="inherit_id" ref="attachment_optimizer.attachment_optimizer_migration_operation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[./group[field[@name='state']]]" position="inside">
+                <group>
+                    <field name="bucket_id" readonly="1" invisible="not bucket_id"/>
+                    <field name="routed" readonly="1" invisible="not routed"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend the free edition migration operation list -->
+    <record id="attachment_optimizer_pro_migration_operation_tree" model="ir.ui.view">
+        <field name="name">attachment.migration.operation.pro.tree</field>
+        <field name="model">attachment.migration.operation</field>
+        <field name="inherit_id" ref="attachment_optimizer.attachment_optimizer_migration_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="bucket_id" optional="show"/>
+                <field name="routed" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Server action: open cleanup wizard from selected mappings -->
+    <record id="attachment_optimizer_pro_action_cleanup_wizard" model="ir.actions.server">
+        <field name="name">Cleanup Local Copies (Pro)</field>
+        <field name="model_id" ref="model_attachment_storage_mapping"/>
+        <field name="binding_model_id" ref="model_attachment_storage_mapping"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'res_model': 'attachment.cleanup.confirm',
+    'view_mode': 'form',
+    'target': 'new',
+}
+</field>
+    </record>
+
+    <!-- Server action: open restore wizard from selected mappings -->
+    <record id="attachment_optimizer_pro_action_restore_wizard" model="ir.actions.server">
+        <field name="name">Restore from S3 (Pro)</field>
+        <field name="model_id" ref="model_attachment_storage_mapping"/>
+        <field name="binding_model_id" ref="model_attachment_storage_mapping"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'res_model': 'attachment.restore.confirm',
+    'view_mode': 'form',
+    'target': 'new',
+}
+</field>
+    </record>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Pro menus are inserted under the free edition Storage Optimization menu -->
+    <menuitem id="attachment_optimizer_pro_storage_bucket_menu"
+              name="Buckets"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_storage_bucket_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="15"/>
+
+    <menuitem id="attachment_optimizer_pro_storage_rule_menu"
+              name="Routing Rules"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_storage_rule_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="16"/>
+
+    <menuitem id="attachment_optimizer_pro_storage_policy_menu"
+              name="Lifecycle Policies"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_storage_policy_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="17"/>
+
+    <menuitem id="attachment_optimizer_pro_cleanup_batch_menu"
+              name="Cleanup Batches"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_cleanup_batch_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="18"/>
+
+    <menuitem id="attachment_optimizer_pro_restore_batch_menu"
+              name="Restore Batches"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_restore_batch_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="19"/>
+
+    <!-- Analytics report action (bound to the Storage Optimization menu) -->
+    <record id="attachment_optimizer_pro_analytics_action" model="ir.actions.server">
+        <field name="name">Storage Analytics (Pro)</field>
+        <field name="model_id" ref="model_attachment_storage_mapping"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env['attachment.storage.mapping'].action_show_analytics()
+</field>
+    </record>
+
+    <menuitem id="attachment_optimizer_pro_analytics_menu"
+              name="Storage Analytics"
+              parent="attachment_optimizer.storage_optimization_menu"
+              action="attachment_optimizer_pro_analytics_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="25"/>
+</odoo>

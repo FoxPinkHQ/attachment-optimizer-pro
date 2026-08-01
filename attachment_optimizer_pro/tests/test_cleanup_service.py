@@ -89,6 +89,15 @@ class TestCleanupService(TransactionCase):
         self.assertEqual(batch.failed, 1)
         self.assertEqual(action['params']['type'], 'warning')
         self.assertIn('Review the batch details', action['params']['message'])
+        self.assertEqual(batch.failed_mapping_ids, self.mapping)
+        self.assertIn('simulated failure', batch.issue_details)
+        retry_action = batch.action_retry_failed()
+        retry = self.env['attachment.cleanup.batch'].browse(
+            retry_action['res_id']
+        )
+        self.assertEqual(retry.retry_of_id, batch)
+        self.assertEqual(retry.failed, 0)
+        self.assertEqual(retry.cleaned, 1)
     def test_cleanup_removes_local_copy_after_verification(self):
         from odoo.addons.attachment_optimizer_pro.services.cleanup_service \
             import CleanupService

@@ -43,6 +43,16 @@ class CleanupBatch(models.Model):
         'attachment.storage.mapping', string='Processed Mappings',
         readonly=True,
     )
+    failed_mapping_ids = fields.Many2many(
+        'attachment.storage.mapping',
+        'attachment_cleanup_batch_failed_mapping_rel',
+        string='Failed Mappings', readonly=True,
+    )
+    issue_details = fields.Text(string='Issue Details', readonly=True)
+    retry_of_id = fields.Many2one(
+        'attachment.cleanup.batch', string='Retry Of', readonly=True,
+        ondelete='set null',
+    )
 
     @api.depends('reclaimed_bytes')
     def _compute_reclaimed_display(self):
@@ -82,6 +92,26 @@ class CleanupBatch(models.Model):
             },
         }
 
+    def action_retry_failed(self):
+        self.ensure_one()
+        if self.state != 'done' or not self.failed_mapping_ids:
+            raise UserError(_('This cleanup batch has no failed mappings to retry.'))
+        retry = self.create({
+            'company_id': self.company_id.id,
+            'retention_days': self.retention_days,
+            'quarantine_days': self.quarantine_days,
+            'limit': len(self.failed_mapping_ids),
+            'retry_of_id': self.id,
+        })
+        from ..services.cleanup_service import CleanupService
+        CleanupService(self.env).run_mappings(retry, self.failed_mapping_ids)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': retry.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
     def action_cancel(self):
         self.ensure_one()
         self.state = 'cancelled'

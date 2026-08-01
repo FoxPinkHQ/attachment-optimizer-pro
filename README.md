@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 19.0.1.0.10 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 19.0**
+**Version:** 19.0.1.0.11 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 19.0**
 
 ---
 
@@ -113,6 +113,7 @@ Restore when required
 - **Cleanup Safety Preview** — dry-run selected files against local and live S3 checksums, show blocked reasons, and calculate reclaimable space before cleanup
 - **Restore Drill evidence** — verify a random sample of cleaned objects without mutating attachments, with immutable per-file pass/fail results
 - **Pro visual identity** — use the Pro application icon consistently in the launcher, root menu, and Settings while Pro is installed
+- **Failure-focused retries** — retain per-file cleanup/restore errors and retry only failed mappings in a linked child batch
 - **Storage analytics** — track migrated volume, reclaimed space, and failures
 - **Operational alerts** — detect failed queues, stuck operations, and verification failures
 - **Batch results** — review processed, skipped, failed, cleaned, and restored records

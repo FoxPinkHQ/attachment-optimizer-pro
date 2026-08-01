@@ -55,20 +55,18 @@
                     </group>
                     <group string="Action Settings">
                         <field name="bucket_id"
-                               invisible="action not in ('migrate','archive')"
-                               required="action in ('migrate','archive')"/>
+                               attrs="{'invisible': [('action', 'not in', ('migrate', 'archive'))], 'required': [('action', 'in', ('migrate', 'archive'))]}"/>
                         <field name="retention_days"
-                               invisible="action not in ('cleanup','archive')"
-                               required="action in ('cleanup','archive')"/>
+                               attrs="{'invisible': [('action', 'not in', ('cleanup', 'archive'))], 'required': [('action', 'in', ('cleanup', 'archive'))]}"/>
                         <field name="quarantine_days"
-                               invisible="action not in ('cleanup','archive')"/>
+                               attrs="{'invisible': [('action', 'not in', ('cleanup', 'archive'))]}"/>
                     </group>
                     <group string="Schedule" name="schedule">
                         <field name="schedule_enabled"/>
                         <field name="interval_number"
-                               invisible="not schedule_enabled"/>
+                               attrs="{'invisible': [('schedule_enabled', '=', False)]}"/>
                         <field name="interval_type"
-                               invisible="not schedule_enabled"/>
+                               attrs="{'invisible': [('schedule_enabled', '=', False)]}"/>
                     </group>
                 </sheet>
             </form>

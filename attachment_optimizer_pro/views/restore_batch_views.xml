@@ -30,9 +30,9 @@
                 <header>
                     <button name="action_run" string="Run Restore" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft'"/>
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                     <button name="action_cancel" string="Cancel" type="object"
-                            invisible="state != 'draft'"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
                             class="btn-secondary"/>
                 </header>
                 <sheet>

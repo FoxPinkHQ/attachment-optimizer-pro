@@ -9,7 +9,7 @@
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_restore_mapping" type="object"
                         class="oe_stat_button" icon="fa-undo"
-                        invisible="cleanup_state not in ('quarantined','cleaned')">
+                        attrs="{'invisible': [('cleanup_state', 'not in', ('quarantined', 'cleaned'))]}">
                     Restore to Filestore
                 </button>
             </xpath>
@@ -40,8 +40,8 @@
         <field name="arch" type="xml">
             <xpath expr="//group[./group[field[@name='state']]]" position="inside">
                 <group>
-                    <field name="bucket_id" readonly="1" invisible="not bucket_id"/>
-                    <field name="routed" readonly="1" invisible="not routed"/>
+                    <field name="bucket_id" readonly="1" attrs="{'invisible': [('bucket_id', '=', False)]}"/>
+                    <field name="routed" readonly="1" attrs="{'invisible': [('routed', '=', False)]}"/>
                 </group>
             </xpath>
         </field>

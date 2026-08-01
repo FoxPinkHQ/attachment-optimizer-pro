@@ -11,7 +11,7 @@
                     the Odoo filestore.
                 </div>
                 <div class="alert alert-info" role="alert"
-                     invisible="count != 0">
+                     attrs="{'invisible': [('count', '!=', 0)]}">
                     No selected mappings are ready to restore. Choose
                     finalized mappings marked Quarantined or Local Copy
                     Removed.
@@ -26,7 +26,7 @@
                 </field>
                 <footer>
                     <button name="action_confirm" string="Confirm Restore"
-                            type="object" class="btn-primary" invisible="count == 0"/>
+                            type="object" class="btn-primary" attrs="{'invisible': [('count', '=', 0)]}"/>
                     <button string="Cancel" class="btn-secondary"
                             special="cancel"/>
                 </footer>

@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+const { Component } = owl;
+const { onWillStart, useState } = owl.hooks;
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -78,7 +79,7 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Reclaimable Attachments",
             res_model: "attachment.storage.mapping",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [
                 ["status", "=", "finalized"],
@@ -93,7 +94,7 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Reclaimed Attachments",
             res_model: "attachment.storage.mapping",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [["cleanup_state", "in", ["quarantined", "cleaned"]]],
         });
@@ -104,7 +105,7 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Failed Operations",
             res_model: "attachment.migration.operation",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [["state", "=", "failed"]],
         });

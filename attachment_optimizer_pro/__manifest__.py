@@ -1,6 +1,6 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """
@@ -12,7 +12,7 @@
     "author": "FoxPink",
     "support": "aduy000@gmail.com",
     "website": "https://github.com/FoxPinkHQ/attachment-optimizer-pro",
-    "license": "LGPL-3",
+    "license": "OPL-1",
     "price": 49.0,
     "currency": "USD",
     "images": [

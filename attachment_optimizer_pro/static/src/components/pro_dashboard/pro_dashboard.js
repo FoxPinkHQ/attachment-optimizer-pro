@@ -24,6 +24,16 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
                 reclaimed_display: "0 B",
                 reclaimed: 0,
                 failed: 0,
+                recovery_assurance: {
+                    status: "disabled",
+                    status_label: "SCHEDULE OFF",
+                    coverage_display: "0 / 0 companies",
+                    tested: 0,
+                    passed: 0,
+                    failed: 0,
+                    last_run: false,
+                    interval_days: 7,
+                },
                 savings: {
                     cost_display: "$0.20/GiB/month",
                     reclaimed_monthly_display: "$0.00",
@@ -102,6 +112,17 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             domain: [["cleanup_state", "in", ["quarantined", "cleaned"]]],
+        });
+    }
+
+    onViewRestoreDrills() {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Restore Drill Evidence",
+            res_model: "attachment.restore.drill",
+            view_mode: "list,form",
+            views: [[false, "list"], [false, "form"]],
+            domain: [],
         });
     }
 

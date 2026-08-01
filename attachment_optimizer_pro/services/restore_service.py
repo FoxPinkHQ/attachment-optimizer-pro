@@ -81,15 +81,26 @@ class RestoreService:
         failed = 0
         restored_bytes = 0
         processed = self.env['attachment.storage.mapping']
+        failed_mappings = self.env['attachment.storage.mapping']
+        issues = []
         for mp in candidates:
             try:
                 result = self.restore_mapping(mp)
                 processed |= mp
                 restored += 1
                 restored_bytes += result['restored_bytes']
-            except Exception:
+            except Exception as exc:
                 _logger.exception('Restore failed for mapping %s', mp.id)
                 failed += 1
+                failed_mappings |= mp
+                detail = str(exc)[:500]
+                issues.append('%s: %s' % (mp.attachment_id.name, detail))
+                self.env['attachment.audit.log']._log(
+                    'restore', result='failure',
+                    attachment_id=mp.attachment_id.id,
+                    attachment_name=mp.attachment_id.name,
+                    mapping_id=mp.id, error_message=detail,
+                )
         batch.write({
             'state': 'done',
             'finished_at': fields.Datetime.now(),
@@ -97,4 +108,6 @@ class RestoreService:
             'failed': failed,
             'restored_bytes': restored_bytes,
             'mapping_ids': [(6, 0, processed.ids)],
+            'failed_mapping_ids': [(6, 0, failed_mappings.ids)],
+            'issue_details': '\n'.join(issues) or False,
         })

@@ -43,6 +43,12 @@
               groups="attachment_optimizer.group_storage_optimization_manager"
               sequence="50"/>
 
+    <menuitem id="attachment_optimizer_pro_restore_drill_menu"
+              name="Restore Drills"
+              parent="attachment_optimizer_pro_menu"
+              action="attachment_optimizer_pro_restore_drill_action"
+              groups="attachment_optimizer.group_storage_optimization_manager"
+              sequence="55"/>
     <!-- Analytics report action (bound to the Storage Optimization menu) -->
     <record id="attachment_optimizer_pro_analytics_action" model="ir.actions.server">
         <field name="name">Storage Analytics (Pro)</field>

@@ -50,6 +50,23 @@
                                 Savings estimates equal reclaimed local GiB × this monthly rate.
                             </div>
                         </setting>
+                        <setting type="header" string="Scheduled Restore Assurance"/>
+                        <setting id="pro_restore_drill_enabled_setting"
+                                 string="Enable Scheduled Restore Drills"
+                                 help="Periodically download and verify a company-scoped sample without changing attachments or cleanup state.">
+                            <field name="pro_restore_drill_enabled"/>
+                        </setting>
+                        <setting id="pro_restore_drill_sample_size_setting"
+                                 string="Sample Size per Company"
+                                 help="Number of eligible cleaned or quarantined objects verified for each company.">
+                            <field name="pro_restore_drill_sample_size"/>
+                        </setting>
+                        <setting id="pro_restore_drill_interval_setting"
+                                 string="Drill Interval (days)"
+                                 help="Minimum number of days between scheduled restore-assurance runs.">
+                            <field name="pro_restore_drill_interval_days"/>
+                        </setting>
+
                         <setting type="header" string="Background Processing"/>
                         <setting id="pro_concurrency_setting" string="Routing Concurrency"
                                  help="Maximum routed operations processed per cron run.">

@@ -1,17 +1,20 @@
-/** @odoo-module **/
+odoo.define("attachment_optimizer_pro.safety_dashboard", function (require) {
+"use strict";
 
-import { Component, onWillStart, useState } from "@odoo/owl";
-import { registry } from "@web/core/registry";
-import { useService } from "@web/core/utils/hooks";
+const AbstractAction = require("web.AbstractAction");
+const core = require("web.core");
+const { ComponentWrapper, WidgetAdapterMixin } = require("web.OwlCompatibility");
+const { Component } = owl;
+const { onWillStart, useState } = owl.hooks;
 
-export class ProSafetyDashboard extends Component {
+
+class ProSafetyDashboard extends Component {
 static template = "attachment_optimizer_pro.SafetyDashboard";
-    static props = {};
 
     setup() {
-        this.orm = useService("orm");
-        this.action = useService("action");
-        this.notification = useService("notification");
+        this.orm = { call: this.props.rpc };
+        this.action = { doAction: this.props.doAction };
+        this.notification = { add: this.props.notify };
         this.state = useState({
             loading: true,
             checking: false,
@@ -78,7 +81,7 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Reclaimable Attachments",
             res_model: "attachment.storage.mapping",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [
                 ["status", "=", "finalized"],
@@ -93,7 +96,7 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Reclaimed Attachments",
             res_model: "attachment.storage.mapping",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [["cleanup_state", "in", ["quarantined", "cleaned"]]],
         });
@@ -104,14 +107,34 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
             type: "ir.actions.act_window",
             name: "Failed Operations",
             res_model: "attachment.migration.operation",
-            view_mode: "list,form",
+            view_mode: "tree,form",
             views: [[false, "list"], [false, "form"]],
             domain: [["state", "=", "failed"]],
         });
     }
 }
 
-registry.category("actions").add(
+ProSafetyDashboard.template = "attachment_optimizer_pro.SafetyDashboard";
+
+const SafetyDashboardAction = AbstractAction.extend(WidgetAdapterMixin, {
+    start() {
+        this.component = new ComponentWrapper(this, ProSafetyDashboard, {
+            rpc: (model, method, args, kwargs) => this._rpc({
+                model, method, args, kwargs: kwargs || {},
+            }),
+            doAction: (action, options) => this.do_action(action, options || {}),
+            notify: (message, options) => this.displayNotification({
+                message,
+                type: (options && options.type) || "info",
+            }),
+        });
+        return this.component.mount(this.el);
+    },
+});
+
+core.action_registry.add(
     "attachment_optimizer_pro.safety_dashboard",
-    ProSafetyDashboard
+    SafetyDashboardAction
 );
+return SafetyDashboardAction;
+});

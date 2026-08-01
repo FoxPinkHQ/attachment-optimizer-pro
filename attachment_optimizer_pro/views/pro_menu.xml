@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="attachment_optimizer.storage_optimization_menu" model="ir.ui.menu">
+        <field name="web_icon">attachment_optimizer_pro,static/description/icon.png</field>
+    </record>
     <!-- All Pro menus are grouped under a single "Pro Features" submenu so
          the free edition menu header stays untouched. -->
     <menuitem id="attachment_optimizer_pro_menu"

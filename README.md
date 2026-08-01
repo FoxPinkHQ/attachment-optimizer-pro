@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 15.0.1.0.0 -- **License:** LGPL-3 -- **Publisher:** FoxPink -- Maintained for **Odoo 15.0**
+**Version:** 14.0.1.0.0 -- **License:** LGPL-3 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
 
 ---
 
@@ -143,8 +143,8 @@ Restore when required
 **Option 2 — Git for licensed deployments:**
 
 ```bash
-git clone -b 15.0 https://github.com/FoxPinkHQ/attachment-optimizer addons/attachment_optimizer
-git clone -b 15.0 https://github.com/FoxPinkHQ/attachment-optimizer-pro addons/attachment_optimizer_pro
+git clone -b 14.0 https://github.com/FoxPinkHQ/attachment-optimizer addons/attachment_optimizer
+git clone -b 14.0 https://github.com/FoxPinkHQ/attachment-optimizer-pro addons/attachment_optimizer_pro
 ```
 
 Install the required Python dependency in the same runtime that runs Odoo:
@@ -198,7 +198,7 @@ After adding both modules, restart Odoo, activate Developer Mode, go to **Apps �
 - Requires `boto3` in the Odoo server runtime
 - Supports S3-compatible object storage; provider-specific non-S3 APIs are outside scope
 - Odoo Online is not supported because external Python dependencies are required
-- This branch is validated for Odoo 15.0; other series require their dedicated validated build
+- This branch is validated for Odoo 14.0; other series require their dedicated validated build
 
 ---
 
@@ -230,7 +230,7 @@ The Free Edition provides the complete verified migration foundation without tri
 
 ## Compatibility
 
-This release is validated for Odoo 15.0. Additional Odoo series must use a separately tested branch and package.
+This release is validated for Odoo 14.0. Additional Odoo series must use a separately tested branch and package.
 
 | Odoo Version | Status |
 |---|---|
@@ -238,8 +238,8 @@ This release is validated for Odoo 15.0. Additional Odoo series must use a separ
 | 18.0 | Dedicated branch |
 | 17.0 | Dedicated branch |
 | 16.0 | Dedicated branch |
-| 15.0 | ✅ Validated release candidate |
-| 14.0 | Planned validation |
+| 15.0 | Dedicated branch |
+| 14.0 | ✅ Validated release candidate |
 
 ---
 

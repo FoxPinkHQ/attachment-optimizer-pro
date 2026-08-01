@@ -45,7 +45,10 @@ class TestReadmeFeatures(TransactionCase):
     def _start_moto(self):
         try:
             import boto3
-            from moto import mock_aws
+            try:
+                from moto import mock_aws
+            except ImportError:
+                from moto import mock_s3 as mock_aws
         except ImportError:
             self.skipTest('moto or boto3 not available')
         mock = mock_aws()

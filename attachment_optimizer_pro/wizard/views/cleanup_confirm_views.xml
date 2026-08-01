@@ -4,53 +4,72 @@
         <field name="name">attachment.cleanup.confirm.form</field>
         <field name="model">attachment.cleanup.confirm</field>
         <field name="arch" type="xml">
-            <form string="Confirm Local Copy Cleanup">
+            <form string="Cleanup Safety Preview">
                 <div class="alert alert-warning" role="alert">
                     <i class="fa fa-shield"/>
-                    Local filestore copies will be removed <strong>only
-                    after</strong> SHA-256 checksum verification against the
-                    S3 object. Restore from S3 remains possible at any time.
+                    No local copy is removed during preview. Cleanup is unlocked
+                    only for files whose local and live S3 SHA-256 checks pass.
                 </div>
                 <div class="alert alert-info" role="alert"
-                     invisible="count != 0">
-                    No selected mappings are eligible. Choose finalized
-                    mappings that have completed the retention period.
-                </div>                <group>
-                    <div class="alert alert-info" role="alert"
-                     invisible="count != 0">
-                    No selected mappings are eligible. Choose finalized
-                    mappings that have completed the retention period.
-                </div>                <group>
-                        <field name="count"/>
-                        <field name="estimated_display"/>
-                    </group>
-                    <div class="alert alert-info" role="alert"
-                     invisible="count != 0">
-                    No selected mappings are eligible. Choose finalized
-                    mappings that have completed the retention period.
-                </div>                <group>
+                     invisible="safety_previewed">
+                    Run Safety Preview to verify the selected files against live
+                    S3 storage and calculate reclaimable space.
+                </div>
+                <div class="alert alert-success" role="alert"
+                     invisible="not safety_previewed or count == 0">
+                    Safety preview passed for <field name="count" class="oe_inline"/>
+                    file(s). Estimated reclaim:
+                    <field name="estimated_display" class="oe_inline"/>.
+                </div>
+                <div class="alert alert-danger" role="alert"
+                     invisible="not safety_previewed or blocked_count == 0">
+                    <field name="blocked_count" class="oe_inline"/> selected
+                    file(s) were blocked and will remain local.
+                </div>
+                <group>
+                    <group string="Preview Scope">
+                        <field name="selected_count"/>
                         <field name="retention_days"/>
                         <field name="quarantine_days"/>
                     </group>
+                    <group string="Safety Results">
+                        <field name="count"/>
+                        <field name="remote_verified_count"/>
+                        <field name="blocked_count"/>
+                        <field name="estimated_display"/>
+                        <field name="previewed_at" invisible="not safety_previewed"/>
+                    </group>
                 </group>
-                <field name="mapping_ids" nolabel="1">
-                    <list>
-                        <field name="attachment_id"/>
-                        <field name="cleanup_state" widget="badge"/>
-                    </list>
-                </field>
+                <group string="Blocked Reasons"
+                       invisible="not safety_previewed or blocked_count == 0">
+                    <field name="blocked_summary" nolabel="1"/>
+                </group>
+                <group string="Safety-Verified Mappings"
+                       invisible="not safety_previewed or count == 0">
+                    <field name="mapping_ids" nolabel="1">
+                        <list create="false" delete="false">
+                            <field name="attachment_id"/>
+                            <field name="checksum_sha256"/>
+                            <field name="cleanup_state" widget="badge"/>
+                        </list>
+                    </field>
+                </group>
+                <field name="candidate_ids" invisible="1"/>
+                <field name="safety_previewed" invisible="1"/>
                 <footer>
+                    <button name="action_preview" string="Run Safety Preview"
+                            type="object" class="btn-secondary"/>
                     <button name="action_confirm" string="Confirm Cleanup"
-                            type="object" class="btn-primary" invisible="count == 0"/>
-                    <button string="Cancel" class="btn-secondary"
-                            special="cancel"/>
+                            type="object" class="btn-primary"
+                            invisible="not safety_previewed or count == 0"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
     <record id="attachment_optimizer_pro_cleanup_confirm_action" model="ir.actions.act_window">
-        <field name="name">Confirm Local Copy Cleanup</field>
+        <field name="name">Cleanup Safety Preview</field>
         <field name="res_model">attachment.cleanup.confirm</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

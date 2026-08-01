@@ -32,5 +32,20 @@
             <field name="value">False</field>
         </record>
 
+        <record id="attachment_storage_pro_restore_drill_enabled" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.restore_drill.enabled</field>
+            <field name="value">False</field>
+        </record>
+
+        <record id="attachment_storage_pro_restore_drill_sample_size" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.restore_drill.sample_size</field>
+            <field name="value">10</field>
+        </record>
+
+        <record id="attachment_storage_pro_restore_drill_interval_days" model="ir.config_parameter">
+            <field name="key">attachment_storage_pro.restore_drill.interval_days</field>
+            <field name="value">7</field>
+        </record>
+
     </data>
 </odoo>

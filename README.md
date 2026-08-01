@@ -234,16 +234,18 @@ The Free Edition provides the complete verified migration foundation without tri
 
 ## Compatibility
 
-This release is validated for Odoo 19.0. Additional Odoo series must use a separately tested branch and package.
+Validated release available for every Odoo series from 14.0 to 19.0.
+
+Every supported Odoo version has its own dedicated branch and release package.
 
 | Odoo Version | Status |
 |---|---|
-| 19.0 | ✅ Validated — use branch/package 19.0 |
-| 18.0 | ✅ Validated — use branch/package 18.0 |
-| 17.0 | ✅ Validated — use branch/package 17.0 |
-| 16.0 | ✅ Validated — use branch/package 16.0 |
-| 15.0 | ✅ Validated — use branch/package 15.0 |
-| 14.0 | ✅ Validated — use branch/package 14.0 |
+| 19.0 | ✅ This branch |
+| 18.0 | [Branch 18.0](https://github.com/FoxPinkHQ/attachment-optimizer-pro/tree/18.0) |
+| 17.0 | [Branch 17.0](https://github.com/FoxPinkHQ/attachment-optimizer-pro/tree/17.0) |
+| 16.0 | [Branch 16.0](https://github.com/FoxPinkHQ/attachment-optimizer-pro/tree/16.0) |
+| 15.0 | [Branch 15.0](https://github.com/FoxPinkHQ/attachment-optimizer-pro/tree/15.0) |
+| 14.0 | [Branch 14.0](https://github.com/FoxPinkHQ/attachment-optimizer-pro/tree/14.0) |
 
 ---
 

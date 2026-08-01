@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="attachment_optimizer_pro.SafetyDashboard">
+        <div class="o_pro_safety_dashboard">
+            <div class="o_pro_dashboard_header">
+                <div>
+                    <h2>Safety &amp; Savings</h2>
+                    <p class="text-muted mb-0">Verified storage, reclaimable local space, and cleanup readiness.</p>
+                </div>
+                <div class="o_pro_dashboard_actions">
+                    <button class="btn btn-outline-secondary" type="button"
+                            t-on-click="load" t-att-disabled="state.loading"
+                            aria-label="Refresh safety and savings dashboard">
+                        <i t-att-class="'fa ' + (state.loading ? 'fa-spinner fa-spin' : 'fa-refresh')"/>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary" type="button"
+                            t-on-click="onRunReadiness" t-att-disabled="state.checking"
+                            aria-label="Run live cleanup readiness check">
+                        <i t-att-class="'fa ' + (state.checking ? 'fa-spinner fa-spin' : 'fa-shield')"/>
+                        Run Live Check
+                    </button>
+                </div>
+            </div>
+
+            <div class="o_pro_readiness_banner"
+                 t-att-class="state.readiness.ready ? 'o_pro_ready' : 'o_pro_attention'"
+                 role="status">
+                <i t-att-class="'fa ' + (state.readiness.ready ? 'fa-check-circle' : 'fa-exclamation-triangle')"/>
+                <div>
+                    <strong t-esc="state.readiness.ready ? 'Ready for safe cleanup' : 'Review cleanup readiness'"/>
+                    <div class="small">
+                        <t t-if="state.readiness.checked_at">Checked <t t-esc="state.readiness.checked_at"/></t>
+                        <t t-else="">Run a live check before enabling automatic cleanup.</t>
+                    </div>
+                </div>
+            </div>
+
+            <div class="o_pro_kpi_grid" aria-label="Storage lifecycle metrics">
+                <div class="o_pro_kpi_card">
+                    <span class="o_pro_kpi_label">Local storage analyzed</span>
+                    <strong t-esc="state.analytics.total_display"/>
+                </div>
+                <div class="o_pro_kpi_card">
+                    <span class="o_pro_kpi_label">Verified on S3</span>
+                    <strong t-esc="state.analytics.migrated_display"/>
+                    <small><t t-esc="state.analytics.migrated"/> attachment(s)</small>
+                </div>
+                <button class="o_pro_kpi_card o_pro_kpi_action o_pro_kpi_primary"
+                        type="button" t-on-click="onViewReclaimable">
+                    <span class="o_pro_kpi_label">Reclaimable now</span>
+                    <strong t-esc="state.analytics.reclaimable_display"/>
+                    <small><t t-esc="state.analytics.reclaimable"/> eligible attachment(s)</small>
+                </button>
+                <button class="o_pro_kpi_card o_pro_kpi_action o_pro_kpi_success"
+                        type="button" t-on-click="onViewReclaimed">
+                    <span class="o_pro_kpi_label">Local space reclaimed</span>
+                    <strong t-esc="state.analytics.reclaimed_display"/>
+                    <small><t t-esc="state.analytics.reclaimed"/> attachment(s)</small>
+                </button>
+                <button class="o_pro_kpi_card o_pro_kpi_action"
+                        t-att-class="state.analytics.failed ? 'o_pro_kpi_danger' : ''"
+                        type="button" t-on-click="onViewFailed">
+                    <span class="o_pro_kpi_label">Failed operations</span>
+                    <strong t-esc="state.analytics.failed"/>
+                    <small>Open failure queue</small>
+                </button>
+            </div>
+
+            <div class="o_pro_dashboard_columns">
+                <section class="o_pro_panel" aria-labelledby="readiness-title">
+                    <div class="o_pro_panel_header">
+                        <h3 id="readiness-title">Cleanup readiness</h3>
+                        <span class="badge" t-att-class="state.readiness.ready ? 'text-bg-success' : 'text-bg-warning'"
+                              t-esc="state.readiness.ready ? 'READY' : 'ATTENTION'"/>
+                    </div>
+                    <div class="o_pro_check_list">
+                        <div class="o_pro_check" t-foreach="state.readiness.checks"
+                             t-as="check" t-key="check.code">
+                            <i t-att-class="'fa ' + (check.status === 'pass' ? 'fa-check-circle text-success' : check.status === 'warn' ? 'fa-exclamation-circle text-warning' : 'fa-times-circle text-danger')"/>
+                            <div>
+                                <strong t-esc="check.label"/>
+                                <p class="mb-0 text-muted small" t-esc="check.detail"/>
+                            </div>
+                            <span class="visually-hidden" t-esc="check.status"/>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="o_pro_panel" aria-labelledby="bucket-title">
+                    <div class="o_pro_panel_header">
+                        <h3 id="bucket-title">Verified storage by bucket</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead><tr><th>Bucket</th><th class="text-end">Objects</th><th class="text-end">Volume</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="state.analytics.buckets" t-as="bucket" t-key="bucket.bucket">
+                                    <td><i class="fa fa-database text-muted me-1"/><t t-esc="bucket.bucket"/></td>
+                                    <td class="text-end" t-esc="bucket.count"/>
+                                    <td class="text-end" t-esc="bucket.display"/>
+                                </tr>
+                                <tr t-if="!state.analytics.buckets.length">
+                                    <td colspan="3" class="text-center text-muted py-4">No finalized objects yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

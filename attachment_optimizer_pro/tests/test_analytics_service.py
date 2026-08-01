@@ -11,7 +11,8 @@ class TestAnalyticsService(TransactionCase):
             'total_attachments', 'total_bytes', 'total_display',
             'migrated', 'migrated_bytes', 'migrated_display',
             'migration_pct', 'reclaimed', 'reclaimed_bytes',
-            'reclaimed_display', 'failed', 'buckets',
+            'reclaimed_display', 'reclaimable', 'reclaimable_bytes',
+            'reclaimable_display', 'failed', 'buckets',
         ):
             self.assertIn(key, report)
         self.assertEqual(report['migration_pct'], 0)

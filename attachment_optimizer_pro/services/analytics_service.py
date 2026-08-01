@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from odoo import fields
 from odoo.addons.attachment_optimizer.services.utils import human_size
 
@@ -79,62 +77,8 @@ class AnalyticsService:
         def usd(value):
             return '$%s' % format(value, ',.2f')
 
-        config = ProConfig(env)
-        interval_days = config.restore_drill_interval_days()
-        now = fields.Datetime.now()
-        latest_drills = []
-        overdue_companies = 0
-        for company in env.companies:
-            drill = env['attachment.restore.drill'].search([
-                ('company_id', '=', company.id),
-                ('state', 'in', ('passed', 'failed')),
-            ], order='run_at DESC, id DESC', limit=1)
-            if drill:
-                latest_drills.append(drill)
-                if not drill.run_at or (
-                    drill.run_at + timedelta(days=interval_days) <= now
-                ):
-                    overdue_companies += 1
-            else:
-                overdue_companies += 1
-        failed_drills = sum(
-            1 for drill in latest_drills if drill.state == 'failed'
-        )
-        last_run = max(
-            (drill.run_at for drill in latest_drills if drill.run_at),
-            default=False,
-        )
-        if not config.restore_drill_enabled():
-            assurance_status = 'disabled'
-        elif failed_drills:
-            assurance_status = 'failed'
-        elif overdue_companies:
-            assurance_status = 'overdue'
-        else:
-            assurance_status = 'healthy'
-        assurance_labels = {
-            'disabled': 'SCHEDULE OFF',
-            'failed': 'ATTENTION',
-            'overdue': 'DUE',
-            'healthy': 'HEALTHY',
-        }
-        recovery_assurance = {
-            'enabled': config.restore_drill_enabled(),
-            'status': assurance_status,
-            'status_label': assurance_labels[assurance_status],
-            'company_count': len(env.companies),
-            'covered_companies': len(latest_drills),
-            'coverage_display': '%d / %d companies' % (
-                len(latest_drills), len(env.companies),
-            ),
-            'overdue_companies': overdue_companies,
-            'failed_drills': failed_drills,
-            'tested': sum(drill.tested for drill in latest_drills),
-            'passed': sum(drill.passed for drill in latest_drills),
-            'failed': sum(drill.failed for drill in latest_drills),
-            'last_run': fields.Datetime.to_string(last_run) if last_run else False,
-            'interval_days': interval_days,
-        }
+        from .recovery_assurance_service import RecoveryAssuranceService
+        recovery_assurance = RecoveryAssuranceService(env).assess()
 
         return {
             'total_attachments': total_count,

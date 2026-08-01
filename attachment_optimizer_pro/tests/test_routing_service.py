@@ -90,6 +90,30 @@ class TestRoutingService(TransactionCase):
         routed = RoutingService(self.env).route_attachments(att)
         self.assertEqual(len(routed), 0)
 
+    def test_rule_resolution_uses_attachment_company(self):
+        other_company = self.env['res.company'].create({
+            'name': 'Routing Company B',
+        })
+        other_bucket = self.Bucket.sudo().create({
+            'name': 'company-b-bucket',
+            'company_ids': [(6, 0, [other_company.id])],
+        })
+        other_rule = self.Rule.sudo().create({
+            'name': 'company-b-pdf',
+            'company_id': other_company.id,
+            'mime_type': 'application/pdf',
+            'bucket_id': other_bucket.id,
+        })
+        att = self.env['ir.attachment'].sudo().create({
+            'name': 'company-b.pdf',
+            'type': 'binary',
+            'mimetype': 'application/pdf',
+            'datas': 'aGVsbG8gd29ybGQ=',
+            'company_id': other_company.id,
+        })
+        resolved = self.Rule.sudo()._resolve_rule(att)
+        self.assertEqual(resolved, other_rule)
+        self.assertNotEqual(resolved, self.rule)
     def test_claim_routed_batch(self):
         att = self._make_attachment()
         self.env['attachment.migration.operation'].create({

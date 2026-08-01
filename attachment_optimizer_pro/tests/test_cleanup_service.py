@@ -32,6 +32,13 @@ class TestCleanupService(TransactionCase):
             'checksum_sha256': checksum,
             'bucket_id': self.bucket.id,
         })
+        verify_target = (
+            'odoo.addons.attachment_optimizer_pro.services.cleanup_service.'
+            'ProS3Bridge.verify'
+        )
+        self.verify_patch = patch(verify_target, return_value=True)
+        self.verify_patch.start()
+        self.addCleanup(self.verify_patch.stop)
 
     def test_cleanup_wizard_rejects_empty_selection(self):
         wizard = self.env['attachment.cleanup.confirm'].new({
@@ -76,6 +83,26 @@ class TestCleanupService(TransactionCase):
         self.assertEqual(self.mapping.cleanup_state, 'kept')
         self.assertTrue(self.mapping.attachment_id.sudo().datas)
 
+    def test_cleanup_preserves_local_copy_without_checksum(self):
+        from odoo.addons.attachment_optimizer_pro.services.cleanup_service \
+            import CleanupService
+        self.mapping.checksum_sha256 = False
+        result = CleanupService(self.env).cleanup_mapping(self.mapping)
+        self.assertFalse(result['changed'])
+        self.assertTrue(result['skipped'])
+        self.assertIn('Missing SHA-256', result['reason'])
+        self.assertTrue(self.mapping.attachment_id.sudo().datas)
+
+    def test_cleanup_preserves_local_copy_when_remote_verification_fails(self):
+        from odoo.addons.attachment_optimizer_pro.services.cleanup_service \
+            import CleanupService
+        service = CleanupService(self.env)
+        with patch.object(service._bridge, 'verify', return_value=False):
+            result = service.cleanup_mapping(self.mapping)
+        self.assertFalse(result['changed'])
+        self.assertTrue(result['skipped'])
+        self.assertIn('Remote object unavailable', result['reason'])
+        self.assertTrue(self.mapping.attachment_id.sudo().datas)
     def test_cleanup_is_idempotent(self):
         from odoo.addons.attachment_optimizer_pro.services.cleanup_service \
             import CleanupService

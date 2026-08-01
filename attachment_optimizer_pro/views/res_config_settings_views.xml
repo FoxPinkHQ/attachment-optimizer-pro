@@ -8,7 +8,11 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="attachment_optimizer.view_attachment_optimizer_config_settings"/>
         <field name="arch" type="xml">
-            <xpath expr="//app[@name='attachment_optimizer']" position="inside">
+            <xpath expr="//app[@name='attachment_optimizer']" position="attributes">
+                <attribute name="data-string">Attachment Optimizer Pro</attribute>
+                <attribute name="string">Attachment Optimizer Pro</attribute>
+                <attribute name="logo">/attachment_optimizer_pro/static/description/icon.png</attribute>
+            </xpath>            <xpath expr="//app[@name='attachment_optimizer']" position="inside">
                 <div id="pro_features">
                     <block title="Pro Features" name="pro_features_setting_container">
 

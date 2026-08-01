@@ -53,10 +53,15 @@ action = env['attachment.storage.mapping'].action_show_analytics()
 </field>
     </record>
 
+    <record id="attachment_optimizer_pro_safety_dashboard_action" model="ir.actions.client">
+        <field name="name">Safety &amp; Savings</field>
+        <field name="tag">attachment_optimizer_pro.safety_dashboard</field>
+    </record>
+
     <menuitem id="attachment_optimizer_pro_analytics_menu"
-              name="Storage Analytics"
+              name="Safety &amp; Savings"
               parent="attachment_optimizer_pro_menu"
-              action="attachment_optimizer_pro_analytics_action"
+              action="attachment_optimizer_pro_safety_dashboard_action"
               groups="attachment_optimizer.group_storage_optimization_manager"
               sequence="60"/>
 </odoo>

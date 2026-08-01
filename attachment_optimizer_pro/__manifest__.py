@@ -41,7 +41,13 @@
         "data/pro_params.xml",
         "data/pro_cron.xml",
     ],
-    "assets": {},
+    "assets": {
+        "web.assets_backend": [
+            "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.js",
+            "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.xml",
+            "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.scss",
+        ],
+    },
     "installable": True,
     "application": False,
     "auto_install": False,

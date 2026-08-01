@@ -96,6 +96,43 @@
                     Estimate only. It excludes S3 charges, data transfer, taxes, and provider discounts.
                 </p>
             </section>
+            <section class="o_pro_assurance_panel" aria-labelledby="assurance-title">
+                <div class="o_pro_assurance_header">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h3 id="assurance-title" class="mb-0">Recovery assurance</h3>
+                            <span class="badge"
+                                  t-att-class="state.analytics.recovery_assurance.status === 'healthy' ? 'text-bg-success' : state.analytics.recovery_assurance.status === 'failed' ? 'text-bg-danger' : 'text-bg-warning'"
+                                  t-esc="state.analytics.recovery_assurance.status_label"/>
+                        </div>
+                        <p class="text-muted mb-0">
+                            Latest immutable restore-drill evidence across allowed companies.
+                        </p>
+                    </div>
+                    <button class="btn btn-outline-primary" type="button"
+                            t-on-click="onViewRestoreDrills"
+                            aria-label="Open restore drill evidence">
+                        <i class="fa fa-external-link" aria-hidden="true"/>
+                        View evidence
+                    </button>
+                </div>
+                <div class="o_pro_assurance_metrics">
+                    <div><span>Company coverage</span><strong t-esc="state.analytics.recovery_assurance.coverage_display"/></div>
+                    <div><span>Latest sample</span><strong><t t-esc="state.analytics.recovery_assurance.passed"/> / <t t-esc="state.analytics.recovery_assurance.tested"/> passed</strong></div>
+                    <div><span>Failed objects</span><strong t-esc="state.analytics.recovery_assurance.failed"/></div>
+                    <div><span>Last completed</span><strong t-esc="state.analytics.recovery_assurance.last_run || 'Not run yet'"/></div>
+                </div>
+                <p class="o_pro_assurance_hint mb-0" t-if="state.analytics.recovery_assurance.status === 'disabled'">
+                    Enable Scheduled Restore Drills in Settings to maintain continuous recovery evidence.
+                </p>
+                <p class="o_pro_assurance_hint mb-0" t-elif="state.analytics.recovery_assurance.status === 'overdue'">
+                    One or more companies have no current evidence for the configured interval.
+                </p>
+                <p class="o_pro_assurance_hint o_pro_assurance_error mb-0" t-elif="state.analytics.recovery_assurance.status === 'failed'">
+                    Review failed evidence before relying on automated cleanup.
+                </p>
+            </section>
+
             <div class="o_pro_dashboard_columns">
                 <section class="o_pro_panel" aria-labelledby="readiness-title">
                     <div class="o_pro_panel_header">

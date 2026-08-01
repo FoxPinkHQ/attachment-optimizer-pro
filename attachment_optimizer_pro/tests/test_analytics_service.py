@@ -1,3 +1,4 @@
+from odoo import fields
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase
 
@@ -14,9 +15,16 @@ class TestAnalyticsService(TransactionCase):
             'migration_pct', 'reclaimed', 'reclaimed_bytes',
             'reclaimed_display', 'reclaimable', 'reclaimable_bytes',
             'reclaimable_display', 'failed', 'buckets', 'savings',
+            'recovery_assurance',
         ):
             self.assertIn(key, report)
         self.assertEqual(report['migration_pct'], 0)
+        for key in (
+            'status', 'status_label', 'company_count', 'covered_companies',
+            'coverage_display', 'overdue_companies', 'failed_drills',
+            'tested', 'passed', 'failed', 'last_run', 'interval_days',
+        ):
+            self.assertIn(key, report['recovery_assurance'])
         for key in (
             'cost_per_gib', 'cost_display', 'reclaimed_monthly',
             'reclaimed_monthly_display', 'reclaimable_monthly',
@@ -24,6 +32,31 @@ class TestAnalyticsService(TransactionCase):
             'potential_annual_display',
         ):
             self.assertIn(key, report['savings'])
+
+    def test_recovery_assurance_reports_current_evidence(self):
+        from odoo.addons.attachment_optimizer_pro.services.analytics_service \
+            import AnalyticsService
+        self.env['ir.config_parameter'].sudo().set_param(
+            'attachment_storage_pro.restore_drill.enabled', True,
+        )
+        drill = self.env['attachment.restore.drill'].create({
+            'company_id': self.env.company.id,
+            'sample_size': 3,
+        })
+        drill.sudo().write({
+            'state': 'passed',
+            'run_at': fields.Datetime.now(),
+            'tested': 3,
+            'passed': 3,
+            'failed': 0,
+        })
+        assurance = AnalyticsService(self.env).get_report()[
+            'recovery_assurance'
+        ]
+        self.assertEqual(assurance['status'], 'healthy')
+        self.assertEqual(assurance['covered_companies'], 1)
+        self.assertEqual(assurance['tested'], 3)
+        self.assertEqual(assurance['failed'], 0)
 
     def test_report_tracks_migrated_and_reclaimed(self):
         from odoo.addons.attachment_optimizer_pro.services.analytics_service \

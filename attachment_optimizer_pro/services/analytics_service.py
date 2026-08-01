@@ -10,6 +10,8 @@ class AnalyticsService:
     def get_report(self):
         env = self.env
         company_ids = env.companies.ids
+        from .cleanup_service import CleanupService
+        from .pro_config import ProConfig
 
         env.cr.execute("""
             SELECT COUNT(*), COALESCE(SUM(file_size), 0)
@@ -52,11 +54,17 @@ class AnalyticsService:
             'bucket': row[0],
             'count': row[1],
             'bytes': row[2],
+            'display': human_size(row[2]),
         } for row in env.cr.fetchall()]
 
         failed = env['attachment.migration.operation'].search_count([
             ('state', '=', 'failed'),
         ])
+        cleanup = CleanupService(env)
+        eligible = cleanup.eligible_mappings(
+            retention_days=ProConfig(env).retention_days(),
+        )
+        reclaimable_bytes = cleanup.estimate_reclaimed(eligible)
 
         return {
             'total_attachments': total_count,
@@ -71,6 +79,9 @@ class AnalyticsService:
             'reclaimed': reclaimed_count,
             'reclaimed_bytes': reclaimed_bytes,
             'reclaimed_display': human_size(reclaimed_bytes),
+            'reclaimable': len(eligible),
+            'reclaimable_bytes': reclaimable_bytes,
+            'reclaimable_display': human_size(reclaimable_bytes),
             'failed': failed,
             'buckets': buckets,
         }

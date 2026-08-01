@@ -63,3 +63,16 @@ class StorageMapping(models.Model):
                 'sticky': True,
             },
         }
+    @api.model
+    def action_get_pro_dashboard_data(self):
+        from ..services.analytics_service import AnalyticsService
+        from ..services.readiness_service import CleanupReadinessService
+        return {
+            'analytics': AnalyticsService(self.env).get_report(),
+            'readiness': CleanupReadinessService(self.env).check(live=False),
+        }
+
+    @api.model
+    def action_run_cleanup_readiness(self):
+        from ..services.readiness_service import CleanupReadinessService
+        return CleanupReadinessService(self.env).check(live=True)

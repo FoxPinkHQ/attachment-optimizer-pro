@@ -203,6 +203,8 @@ class CleanupService:
         skipped = 0
         failed = 0
         processed = self.env['attachment.storage.mapping']
+        failed_mappings = self.env['attachment.storage.mapping']
+        issues = []
         for mp in mappings:
             try:
                 result = self.cleanup_mapping(mp)
@@ -212,9 +214,20 @@ class CleanupService:
                     reclaimed += result['reclaimed']
                 else:
                     skipped += 1
-            except Exception:
+                    reason = result.get('reason') or _('Skipped by safety checks')
+                    issues.append('%s: %s' % (mp.attachment_id.name, reason))
+            except Exception as exc:
                 _logger.exception('Cleanup failed for mapping %s', mp.id)
                 failed += 1
+                failed_mappings |= mp
+                detail = str(exc)[:500]
+                issues.append('%s: %s' % (mp.attachment_id.name, detail))
+                self.env['attachment.audit.log']._log(
+                    'cleanup', result='failure',
+                    attachment_id=mp.attachment_id.id,
+                    attachment_name=mp.attachment_id.name,
+                    mapping_id=mp.id, error_message=detail,
+                )
         batch.write({
             'state': 'done',
             'finished_at': fields.Datetime.now(),
@@ -223,6 +236,8 @@ class CleanupService:
             'failed': failed,
             'reclaimed_bytes': reclaimed,
             'mapping_ids': [(6, 0, processed.ids)],
+            'failed_mapping_ids': [(6, 0, failed_mappings.ids)],
+            'issue_details': '\n'.join(issues) or False,
         })
 
     def run_batch(self, batch):

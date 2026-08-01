@@ -40,6 +40,16 @@ class RestoreBatch(models.Model):
         'attachment.storage.mapping', string='Processed Mappings',
         readonly=True,
     )
+    failed_mapping_ids = fields.Many2many(
+        'attachment.storage.mapping',
+        'attachment_restore_batch_failed_mapping_rel',
+        string='Failed Mappings', readonly=True,
+    )
+    issue_details = fields.Text(string='Failure Details', readonly=True)
+    retry_of_id = fields.Many2one(
+        'attachment.restore.batch', string='Retry Of', readonly=True,
+        ondelete='set null',
+    )
 
     @api.depends('restored_bytes')
     def _compute_restored_display(self):
@@ -78,6 +88,25 @@ class RestoreBatch(models.Model):
             },
         }
 
+    def action_retry_failed(self):
+        self.ensure_one()
+        if self.state != 'done' or not self.failed_mapping_ids:
+            raise UserError(_('This restore batch has no failed mappings to retry.'))
+        retry = self.create({
+            'company_id': self.company_id.id,
+            'limit': len(self.failed_mapping_ids),
+            'mapping_ids': [(6, 0, self.failed_mapping_ids.ids)],
+            'retry_of_id': self.id,
+        })
+        from ..services.restore_service import RestoreService
+        RestoreService(self.env).run_batch(retry)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': retry.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
     def action_cancel(self):
         self.ensure_one()
         self.state = 'cancelled'

@@ -52,6 +52,16 @@ class TestRestoreService(TransactionCase):
         self.assertEqual(batch.failed, 1)
         self.assertEqual(action['params']['type'], 'warning')
         self.assertIn('retry failed attachments', action['params']['message'])
+        self.assertEqual(batch.failed_mapping_ids, mapping)
+        self.assertIn('simulated failure', batch.issue_details)
+        with patch(target, return_value={'restored_bytes': 10}):
+            retry_action = batch.action_retry_failed()
+        retry = self.env['attachment.restore.batch'].browse(
+            retry_action['res_id']
+        )
+        self.assertEqual(retry.retry_of_id, batch)
+        self.assertEqual(retry.failed, 0)
+        self.assertEqual(retry.restored, 1)
     def test_find_restore_candidates(self):
         from odoo.addons.attachment_optimizer_pro.services.restore_service \
             import RestoreService

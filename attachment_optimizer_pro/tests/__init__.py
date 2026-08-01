@@ -4,3 +4,4 @@ from . import test_policy_engine
 from . import test_analytics_service
 from . import test_restore_service
 from . import test_readme_features
+from . import test_readiness_service

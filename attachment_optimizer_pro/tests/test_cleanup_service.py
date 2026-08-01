@@ -2,6 +2,7 @@ import base64
 import hashlib
 from unittest.mock import patch
 
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
@@ -40,6 +41,37 @@ class TestCleanupService(TransactionCase):
         self.verify_patch.start()
         self.addCleanup(self.verify_patch.stop)
 
+    def test_auto_cleanup_pauses_without_current_restore_evidence(self):
+        params = self.env['ir.config_parameter'].sudo()
+        params.set_param('attachment_storage_pro.cleanup.enabled', True)
+        params.set_param('attachment_storage_pro.restore_drill.enabled', True)
+        before = self.env['attachment.cleanup.batch'].search_count([])
+        result = self.env['attachment.cleanup.batch'].action_run_auto_cleanup()
+        self.assertFalse(result)
+        self.assertEqual(
+            self.env['attachment.cleanup.batch'].search_count([]), before,
+        )
+        audit = self.env['attachment.audit.log'].search([
+            ('action', '=', 'cleanup'),
+            ('result', '=', 'failure'),
+        ], order='id DESC', limit=1)
+        self.assertIn('recovery assurance', audit.error_message)
+
+    def test_auto_cleanup_runs_with_healthy_restore_evidence(self):
+        params = self.env['ir.config_parameter'].sudo()
+        params.set_param('attachment_storage_pro.cleanup.enabled', True)
+        params.set_param('attachment_storage_pro.cleanup.retention_days', 365)
+        params.set_param('attachment_storage_pro.restore_drill.enabled', True)
+        drill = self.env['attachment.restore.drill'].create({
+            'company_id': self.env.company.id,
+        })
+        drill.sudo().write({
+            'state': 'passed', 'run_at': fields.Datetime.now(),
+            'tested': 1, 'passed': 1,
+        })
+        self.assertTrue(
+            self.env['attachment.cleanup.batch'].action_run_auto_cleanup()
+        )
     def test_cleanup_wizard_requires_safety_preview(self):
         wizard = self.env['attachment.cleanup.confirm'].create({
             'candidate_ids': [(6, 0, self.mapping.ids)],

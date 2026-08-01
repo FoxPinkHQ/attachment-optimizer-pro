@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 19.0.1.0.14 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 19.0**
+**Version:** 19.0.1.0.15 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 19.0**
 
 ---
 
@@ -115,6 +115,7 @@ Restore when required
 - **Scheduled restore assurance** — run company-scoped restore drills on a configurable cadence and surface failures through operational alerts
 
 - **Recovery Assurance dashboard** — see company coverage, latest restore evidence, overdue schedules, and failed samples at a glance
+- **Recovery Assurance Gate** — pause automatic cleanup when scheduled recovery evidence is missing, overdue, or failed
 - **Pro visual identity** — use the Pro application icon consistently in the launcher, root menu, and Settings while Pro is installed
 - **Failure-focused retries** — retain per-file cleanup/restore errors and retry only failed mappings in a linked child batch
 - **Savings Calculator** — estimate current and potential avoided local-storage cost from a user-configured USD/GiB/month rate

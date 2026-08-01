@@ -4,6 +4,7 @@ from . import routing_service
 from . import pro_migration_service
 from . import cleanup_service
 from . import restore_service
+from . import restore_drill_service
 from . import policy_engine
 from . import analytics_service
 from . import alert_service

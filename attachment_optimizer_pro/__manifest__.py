@@ -1,6 +1,6 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "19.0.1.0.8",
+    "version": "19.0.1.0.9",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """
@@ -33,6 +33,7 @@
         "views/storage_policy_views.xml",
         "views/cleanup_batch_views.xml",
         "views/restore_batch_views.xml",
+        "views/restore_drill_views.xml",
         "views/storage_mapping_views.xml",
         "views/pro_menu.xml",
         "views/res_config_settings_views.xml",

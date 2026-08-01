@@ -3,6 +3,7 @@ from . import storage_rule
 from . import storage_policy
 from . import cleanup_batch
 from . import restore_batch
+from . import restore_drill
 from . import storage_mapping
 from . import migration_operation
 from . import ir_attachment

@@ -25,6 +25,12 @@ static template = "attachment_optimizer_pro.SafetyDashboard";
                 reclaimed_display: "0 B",
                 reclaimed: 0,
                 failed: 0,
+                savings: {
+                    cost_display: "$0.20/GiB/month",
+                    reclaimed_monthly_display: "$0.00",
+                    reclaimable_monthly_display: "$0.00",
+                    potential_annual_display: "$0.00",
+                },
                 buckets: [],
             },
             readiness: { ready: false, checks: [], checked_at: false },

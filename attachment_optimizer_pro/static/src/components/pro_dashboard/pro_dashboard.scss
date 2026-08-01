@@ -62,6 +62,37 @@
 .o_pro_kpi_danger { background: #fff5f5; border-color: #fecaca; }
 .o_pro_kpi_danger strong { color: #dc3545; }
 
+.o_pro_savings_panel {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1e3a5f;
+}
+.o_pro_savings_intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.o_pro_savings_intro h3 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; }
+.o_pro_savings_intro > i { font-size: 1.5rem; color: #2563eb; }
+.o_pro_savings_metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 16px 0 10px;
+}
+.o_pro_savings_metrics > div {
+    min-width: 0;
+    padding: 12px;
+    border-radius: 6px;
+    background: var(--o-view-background-color, #fff);
+}
+.o_pro_savings_metrics span { display: block; color: var(--o-gray-600, #6c757d); font-size: .8rem; }
+.o_pro_savings_metrics strong { display: block; margin-top: 4px; font-size: 1.35rem; }
+.o_pro_savings_note { color: #475569; font-size: .75rem; }
 .o_pro_dashboard_columns { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
 .o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #dee2e6; border-radius: 8px; padding: 16px; }
 .o_pro_panel_header { align-items: center; margin-bottom: 12px; }
@@ -80,6 +111,7 @@
     .o_pro_dashboard_actions .btn { flex: 1; min-height: 44px; }
     .o_pro_kpi_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .o_pro_dashboard_columns { grid-template-columns: 1fr; }
+    .o_pro_savings_metrics { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
     .o_pro_kpi_grid { grid-template-columns: 1fr; }

@@ -65,6 +65,16 @@ class AnalyticsService:
             retention_days=ProConfig(env).retention_days(),
         )
         reclaimable_bytes = cleanup.estimate_reclaimed(eligible)
+        cost_per_gib = ProConfig(env).local_storage_cost_per_gib()
+        gib = 1024.0 ** 3
+        reclaimed_monthly = reclaimed_bytes / gib * cost_per_gib
+        reclaimable_monthly = reclaimable_bytes / gib * cost_per_gib
+        potential_annual = (
+            reclaimed_monthly + reclaimable_monthly
+        ) * 12
+
+        def usd(value):
+            return '$%s' % format(value, ',.2f')
 
         return {
             'total_attachments': total_count,
@@ -83,5 +93,17 @@ class AnalyticsService:
             'reclaimable_bytes': reclaimable_bytes,
             'reclaimable_display': human_size(reclaimable_bytes),
             'failed': failed,
+            'savings': {
+                'cost_per_gib': cost_per_gib,
+                'cost_display': '$%s/GiB/month' % format(
+                    cost_per_gib, ',.4f'
+                ).rstrip('0').rstrip('.'),
+                'reclaimed_monthly': reclaimed_monthly,
+                'reclaimed_monthly_display': usd(reclaimed_monthly),
+                'reclaimable_monthly': reclaimable_monthly,
+                'reclaimable_monthly_display': usd(reclaimable_monthly),
+                'potential_annual': potential_annual,
+                'potential_annual_display': usd(potential_annual),
+            },
             'buckets': buckets,
         }

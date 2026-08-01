@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 15.0.1.0.1 -- **License:** LGPL-3 -- **Publisher:** FoxPink -- Maintained for **Odoo 15.0**
+**Version:** 15.0.1.0.2 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 15.0**
 
 ---
 
@@ -267,4 +267,4 @@ This release is validated for Odoo 15.0. Additional Odoo series must use a separ
 
 ## License
 
-**LGPL-3** — see [LICENSE](LICENSE).
+**OPL-1 (Odoo Proprietary License v1.0)** — see [LICENSE](LICENSE).

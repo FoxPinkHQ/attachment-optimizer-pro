@@ -49,7 +49,7 @@ class MigrationOperation(models.Model):
         """, (limit, token, worker))
         ids = [r[0] for r in self.env.cr.fetchall()]
         claimed = self.browse(ids)
-        claimed.invalidate_recordset()
+        claimed.invalidate_cache()
         for op in claimed:
             self.env['attachment.audit.log']._log(
                 'claim', result='success',

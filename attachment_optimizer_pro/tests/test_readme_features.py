@@ -91,7 +91,7 @@ class TestReadmeFeatures(TransactionCase):
         )
         self.assertEqual(results['success'], 1)
         self.assertEqual(results['failed'], 0)
-        ops.invalidate_recordset()
+        ops.invalidate_cache()
         self.assertEqual(ops[0].state, 'finalized')
         mapping = self.env['attachment.storage.mapping'].lookup_by_attachment(
             att.id,
@@ -288,7 +288,7 @@ class TestReadmeFeatures(TransactionCase):
         MigrationService(self.env).process_queue(
             batch_size=10, operation_ids=ops.ids,
         )
-        att.invalidate_recordset()
+        att.invalidate_cache()
         self.assertTrue(att.store_fname)
         self.assertTrue(att.datas)
 
@@ -326,7 +326,7 @@ class TestReadmeFeatures(TransactionCase):
 
         results = RoutingService(self.env).process_routed_batch()
         self.assertEqual(results['success'], 1)
-        op.invalidate_recordset()
+        op.invalidate_cache()
         self.assertEqual(op.state, 'finalized')
         mapping = self.env['attachment.storage.mapping'].lookup_by_attachment(
             att.id,

@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 15.0.1.0.3 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 15.0**
+**Version:** 15.0.1.0.4 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 15.0**
 
 ---
 
@@ -108,6 +108,8 @@ Restore when required
 
 ### Monitoring
 
+- **Safety & Savings dashboard** — see verified, reclaimable, reclaimed, failed, and per-bucket volume
+- **Cleanup readiness** — inspect configuration, SHA-256 coverage, queue health, retention eligibility, and live S3 samples
 - **Storage analytics** — track migrated volume, reclaimed space, and failures
 - **Operational alerts** — detect failed queues, stuck operations, and verification failures
 - **Batch results** — review processed, skipped, failed, cleaned, and restored records

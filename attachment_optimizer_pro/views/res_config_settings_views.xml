@@ -27,6 +27,12 @@
                     </div>
                 </div>
             </xpath>
-        </field>
+            <xpath expr="//div[@data-key='attachment_optimizer']" position="attributes">
+                <attribute name="data-string">Attachment Optimizer Pro</attribute>
+                <attribute name="string">Attachment Optimizer Pro</attribute>
+                <attribute name="data-key">attachment_optimizer_pro</attribute>
+            </xpath>        </field>
     </record>
-</odoo>
+    <record id="attachment_optimizer.attachment_optimizer_settings_action" model="ir.actions.act_window">
+        <field name="context">{'module': 'attachment_optimizer_pro'}</field>
+    </record></odoo>

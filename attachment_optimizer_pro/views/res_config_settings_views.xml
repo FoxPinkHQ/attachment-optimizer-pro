@@ -18,7 +18,14 @@
                         <div class="col-12 col-lg-6 o_setting_box" id="pro_cleanup_retention_setting"><div class="o_setting_right_pane"><label for="pro_cleanup_retention_days" string="Cleanup Retention (days)"/><div class="text-muted">Keep the local filestore copy this many days after migration before cleanup is allowed.</div><field name="pro_cleanup_retention_days"/></div></div>
                         <div class="col-12 col-lg-6 o_setting_box" id="pro_cleanup_quarantine_setting"><div class="o_setting_right_pane"><label for="pro_cleanup_quarantine_days" string="Cleanup Quarantine (days)"/><div class="text-muted">After the local copy is removed, keep the mapping recoverable for this many days.</div><field name="pro_cleanup_quarantine_days"/></div></div>
                     </div>
-                    <h3>Background Processing</h3>
+                    <h3>Savings Estimate</h3>
+                    <div class="row mt16 o_settings_container" name="pro_savings_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="pro_local_storage_cost_setting"><div class="o_setting_right_pane">
+                            <label for="pro_local_storage_cost_per_gib" string="Local Storage Cost (USD/GiB/month)"/>
+                            <div class="text-muted">Used only for dashboard estimates. Savings equal reclaimed local GiB multiplied by this monthly rate.</div>
+                            <field name="pro_local_storage_cost_per_gib"/>
+                        </div></div>
+                    </div>                    <h3>Background Processing</h3>
                     <div class="row mt16 o_settings_container" name="pro_background_setting_container"><div class="col-12 col-lg-6 o_setting_box" id="pro_concurrency_setting"><div class="o_setting_right_pane"><label for="pro_concurrency" string="Routing Concurrency"/><div class="text-muted">Maximum routed operations processed per cron run.</div><field name="pro_concurrency"/></div></div></div>
                     <h3>Operational Alerts</h3>
                     <div class="row mt16 o_settings_container" name="pro_alert_setting_container">

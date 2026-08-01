@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 14.0.1.0.9 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
+**Version:** 14.0.1.0.10 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
 
 ---
 
@@ -114,6 +114,7 @@ Restore when required
 - **Restore Drill evidence** — verify a random sample of cleaned objects without mutating attachments, with immutable per-file pass/fail results
 - **Pro visual identity** — use the Pro application icon consistently in the launcher, root menu, and Settings while Pro is installed
 - **Failure-focused retries** — retain per-file cleanup/restore errors and retry only failed mappings in a linked child batch
+- **Savings Calculator** — estimate current and potential avoided local-storage cost from a user-configured USD/GiB/month rate
 - **Storage analytics** — track migrated volume, reclaimed space, and failures
 - **Operational alerts** — detect failed queues, stuck operations, and verification failures
 - **Batch results** — review processed, skipped, failed, cleaned, and restored records

@@ -122,7 +122,24 @@ class CleanupBatch(models.Model):
         from ..services.pro_config import ProConfig
         cfg = ProConfig(self.env)
         if not cfg.cleanup_enabled():
-            return
+            return False
+        if cfg.restore_drill_enabled():
+            from ..services.recovery_assurance_service import (
+                RecoveryAssuranceService,
+            )
+            assurance = RecoveryAssuranceService(self.env).assess(
+                self.env.company,
+            )
+            if assurance['status'] != 'healthy':
+                reason = _(
+                    'Automatic cleanup paused: recovery assurance is %(status)s.'
+                ) % {'status': assurance['status_label']}
+                self.env['attachment.audit.log']._log(
+                    'cleanup', result='failure',
+                    attachment_name=_('Automatic cleanup paused'),
+                    error_message=reason,
+                )
+                return False
         batch = self.create({
             'retention_days': cfg.retention_days(),
             'quarantine_days': cfg.quarantine_days(),

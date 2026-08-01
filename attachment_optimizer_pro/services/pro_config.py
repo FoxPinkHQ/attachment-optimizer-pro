@@ -11,6 +11,14 @@ class ProConfig:
     LOCAL_STORAGE_COST = (
         'attachment_storage_pro.cost.local_usd_per_gib_month'
     )
+    RESTORE_DRILL_ENABLED = 'attachment_storage_pro.restore_drill.enabled'
+    RESTORE_DRILL_SAMPLE_SIZE = (
+        'attachment_storage_pro.restore_drill.sample_size'
+    )
+    RESTORE_DRILL_INTERVAL_DAYS = (
+        'attachment_storage_pro.restore_drill.interval_days'
+    )
+    RESTORE_DRILL_LAST_RUN = 'attachment_storage_pro.restore_drill.last_run_at'
 
     def __init__(self, env):
         self.env = env
@@ -57,3 +65,17 @@ class ProConfig:
 
     def local_storage_cost_per_gib(self):
         return max(0.0, self._float(self.LOCAL_STORAGE_COST, 0.20))
+
+    def restore_drill_enabled(self):
+        return self._bool(self.RESTORE_DRILL_ENABLED)
+
+    def restore_drill_sample_size(self):
+        return min(100, max(1, self._int(self.RESTORE_DRILL_SAMPLE_SIZE, 10)))
+
+    def restore_drill_interval_days(self):
+        return min(365, max(1, self._int(
+            self.RESTORE_DRILL_INTERVAL_DAYS, 7,
+        )))
+
+    def restore_drill_last_run(self):
+        return self._get(self.RESTORE_DRILL_LAST_RUN, '')

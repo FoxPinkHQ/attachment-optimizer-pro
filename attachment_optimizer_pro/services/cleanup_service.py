@@ -52,6 +52,65 @@ class CleanupService:
             result = result[:limit]
         return result
 
+    def preview_mappings(self, mappings, retention_days=0, live=True):
+        """Return a read-only safety report for the requested mappings."""
+        eligible = self.env['attachment.storage.mapping']
+        blocked = {}
+        remote_verified = 0
+
+        def block(reason):
+            blocked[reason] = blocked.get(reason, 0) + 1
+
+        for mapping in mappings:
+            if mapping.status != 'finalized':
+                block(_('Not finalized'))
+                continue
+            if mapping.cleanup_state != 'kept' or mapping.removed_at:
+                block(_('Local copy already processed'))
+                continue
+            if self._mapping_age_days(mapping) < retention_days:
+                block(_('Retention period not completed'))
+                continue
+            local = self._read_local_binary(mapping.attachment_id)
+            if local is None:
+                block(_('No local copy to reclaim'))
+                continue
+            if not mapping.checksum_sha256:
+                block(_('Missing SHA-256'))
+                continue
+            if hashlib.sha256(local).hexdigest() != mapping.checksum_sha256:
+                block(_('Local checksum mismatch'))
+                continue
+            if live:
+                bucket = mapping.bucket_id
+                config = bucket._s3_config() if bucket else None
+                try:
+                    verified = self._bridge.verify(
+                        mapping.s3_bucket, mapping.s3_key,
+                        mapping.checksum_sha256, config=config,
+                    )
+                except Exception:
+                    _logger.exception(
+                        'Dry-run remote verification failed for mapping %s',
+                        mapping.id,
+                    )
+                    verified = False
+                if not verified:
+                    block(_('Remote object missing or checksum mismatch'))
+                    continue
+                remote_verified += 1
+            eligible |= mapping
+
+        return {
+            'selected': len(mappings),
+            'eligible': eligible,
+            'eligible_count': len(eligible),
+            'eligible_bytes': self.estimate_reclaimed(eligible),
+            'blocked_count': sum(blocked.values()),
+            'blocked': blocked,
+            'remote_verified': remote_verified,
+            'live': live,
+        }
     def estimate_reclaimed(self, mappings):
         return sum(
             (mp.attachment_id.sudo().file_size or 0) for mp in mappings

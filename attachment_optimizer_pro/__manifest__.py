@@ -1,12 +1,12 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """
         Extends Attachment Optimizer (free edition) with safe local cleanup,
         automatic storage routing, one-click restore, scheduled lifecycle
-        policies, multi-bucket routing, background processing, storage cost
+        policies, multi-bucket routing, background processing, storage volume
         analytics, and operational alerts for larger Odoo environments.
     """,
     "author": "FoxPink",

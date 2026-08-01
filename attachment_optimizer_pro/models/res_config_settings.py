@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class ResConfigSettings(models.TransientModel):
@@ -38,3 +39,18 @@ class ResConfigSettings(models.TransientModel):
         string='Alert Recipient Email',
         config_parameter='attachment_storage_pro.alert.email',
     )
+
+    pro_local_storage_cost_per_gib = fields.Float(
+        string='Local Storage Cost (USD/GiB/month)',
+        config_parameter='attachment_storage_pro.cost.local_usd_per_gib_month',
+        default=0.20,
+        digits=(16, 4),
+    )
+
+    @api.constrains('pro_local_storage_cost_per_gib')
+    def _check_local_storage_cost(self):
+        for record in self:
+            if record.pro_local_storage_cost_per_gib < 0:
+                raise ValidationError(_(
+                    'Local storage cost cannot be negative.'
+                ))

@@ -1,3 +1,4 @@
+from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase
 
 
@@ -12,14 +13,24 @@ class TestAnalyticsService(TransactionCase):
             'migrated', 'migrated_bytes', 'migrated_display',
             'migration_pct', 'reclaimed', 'reclaimed_bytes',
             'reclaimed_display', 'reclaimable', 'reclaimable_bytes',
-            'reclaimable_display', 'failed', 'buckets',
+            'reclaimable_display', 'failed', 'buckets', 'savings',
         ):
             self.assertIn(key, report)
         self.assertEqual(report['migration_pct'], 0)
+        for key in (
+            'cost_per_gib', 'cost_display', 'reclaimed_monthly',
+            'reclaimed_monthly_display', 'reclaimable_monthly',
+            'reclaimable_monthly_display', 'potential_annual',
+            'potential_annual_display',
+        ):
+            self.assertIn(key, report['savings'])
 
     def test_report_tracks_migrated_and_reclaimed(self):
         from odoo.addons.attachment_optimizer_pro.services.analytics_service \
             import AnalyticsService
+        self.env['ir.config_parameter'].sudo().set_param(
+            'attachment_storage_pro.cost.local_usd_per_gib_month', '2.0',
+        )
         before = AnalyticsService(self.env).get_report()
         bucket = self.env['attachment.storage.bucket'].create({
             'name': 'analytics-bucket',
@@ -53,6 +64,23 @@ class TestAnalyticsService(TransactionCase):
         ]
         self.assertEqual(len(bucket_rows), 1)
         self.assertEqual(bucket_rows[0]['count'], 1)
+        expected_monthly = report['reclaimed_bytes'] / (1024.0 ** 3) * 2.0
+        self.assertAlmostEqual(
+            report['savings']['reclaimed_monthly'], expected_monthly,
+        )
+        self.assertAlmostEqual(
+            report['savings']['potential_annual'],
+            (
+                report['reclaimed_bytes'] + report['reclaimable_bytes']
+            ) / (1024.0 ** 3) * 2.0 * 12,
+        )
+
+    def test_local_storage_cost_cannot_be_negative(self):
+        with self.assertRaises(ValidationError):
+            self.env['res.config.settings'].create({
+                'pro_local_storage_cost_per_gib': -1,
+            })
+
     def test_report_excludes_disallowed_company(self):
         from odoo.addons.attachment_optimizer_pro.services.analytics_service \
             import AnalyticsService

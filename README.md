@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 14.0.1.0.0 -- **License:** LGPL-3 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
+**Version:** 14.0.1.0.1 -- **License:** LGPL-3 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
 
 ---
 
@@ -34,6 +34,10 @@ Attachment Optimizer Pro turns the verified Free Edition pipeline into an automa
 - Multi-company deployments requiring isolated buckets
 - Document-heavy accounting, manufacturing, helpdesk, and ERP systems
 - Teams requiring scheduled retention and recoverable cleanup
+
+**Best fit:** Odoo.sh or self-hosted deployments that already use, or plan to use, S3-compatible storage and need controlled automation beyond basic upload offloading.
+
+**Not a fit:** Odoo Online, provider-to-provider migration, bandwidth throttling, or monetary cost forecasting. These are intentionally outside the current scope.
 
 > **Move from verified S3 replication to controlled, measurable storage optimization.**
 
@@ -153,7 +157,7 @@ Install the required Python dependency in the same runtime that runs Odoo:
 pip3 install boto3
 ```
 
-After adding both modules, restart Odoo, activate Developer Mode, go to **Apps → Update Apps List**, install **Attachment Optimizer**, then install **Attachment Optimizer Pro**.
+When both packages are available in the Odoo addons path, installing Pro makes Odoo resolve and install the Free dependency automatically. For a controlled rollout, update the Apps List, install **Attachment Optimizer** first, validate a small migration, then install **Attachment Optimizer Pro**.
 
 > **Deployment note:** This module requires server-side Python code and `boto3`. It supports Odoo.sh and on-premise/Docker deployments; it is not compatible with Odoo Online.
 
@@ -234,12 +238,12 @@ This release is validated for Odoo 14.0. Additional Odoo series must use a separ
 
 | Odoo Version | Status |
 |---|---|
-| 19.0 | Dedicated branch |
-| 18.0 | Dedicated branch |
-| 17.0 | Dedicated branch |
-| 16.0 | Dedicated branch |
-| 15.0 | Dedicated branch |
-| 14.0 | ✅ Validated release candidate |
+| 19.0 | ✅ Validated — use branch/package 19.0 |
+| 18.0 | ✅ Validated — use branch/package 18.0 |
+| 17.0 | ✅ Validated — use branch/package 17.0 |
+| 16.0 | ✅ Validated — use branch/package 16.0 |
+| 15.0 | ✅ Validated — use branch/package 15.0 |
+| 14.0 | ✅ Validated — use branch/package 14.0 |
 
 ---
 
@@ -255,7 +259,8 @@ This release is validated for Odoo 14.0. Additional Odoo series must use a separ
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/FoxPinkHQ/attachment-optimizer-pro/issues)
+- **Product issues:** [Contact FoxPink](mailto:aduy000@gmail.com) with the Odoo version, module version, reproduction steps, and relevant logs
+- **Scope:** product defect support is available; installation, infrastructure, data migration, and custom development are separate services
 - **Publisher:** FoxPink
 
 ---

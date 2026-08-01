@@ -40,12 +40,40 @@ class TestCleanupService(TransactionCase):
         self.verify_patch.start()
         self.addCleanup(self.verify_patch.stop)
 
-    def test_cleanup_wizard_rejects_empty_selection(self):
-        wizard = self.env['attachment.cleanup.confirm'].new({
-            'mapping_ids': [(6, 0, [])],
+    def test_cleanup_wizard_requires_safety_preview(self):
+        wizard = self.env['attachment.cleanup.confirm'].create({
+            'candidate_ids': [(6, 0, self.mapping.ids)],
         })
-        with self.assertRaisesRegex(UserError, 'No local copies are eligible'):
+        with self.assertRaisesRegex(UserError, 'Run Safety Preview'):
             wizard.action_confirm()
+
+    def test_cleanup_preview_reports_safe_reclaim(self):
+        wizard = self.env['attachment.cleanup.confirm'].create({
+            'candidate_ids': [(6, 0, self.mapping.ids)],
+            'retention_days': 0,
+        })
+        action = wizard.action_preview()
+        self.assertTrue(wizard.safety_previewed)
+        self.assertEqual(wizard.count, 1)
+        self.assertEqual(wizard.blocked_count, 0)
+        self.assertEqual(wizard.remote_verified_count, 1)
+        self.assertEqual(wizard.estimated_bytes, len(b'cleanup me now'))
+        self.assertEqual(action['res_id'], wizard.id)
+
+    def test_cleanup_preview_explains_remote_failure(self):
+        wizard = self.env['attachment.cleanup.confirm'].create({
+            'candidate_ids': [(6, 0, self.mapping.ids)],
+            'retention_days': 0,
+        })
+        with patch(
+            'odoo.addons.attachment_optimizer_pro.services.cleanup_service.'
+            'ProS3Bridge.verify', return_value=False,
+        ):
+            wizard.action_preview()
+        self.assertEqual(wizard.count, 0)
+        self.assertEqual(wizard.blocked_count, 1)
+        self.assertIn('Remote object missing', wizard.blocked_summary)
+        self.assertTrue(self.mapping.attachment_id.sudo().datas)
     def test_cleanup_action_warns_when_a_mapping_fails(self):
         batch = self.env['attachment.cleanup.batch'].create({
             'retention_days': 0,

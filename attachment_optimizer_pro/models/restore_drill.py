@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -15,6 +17,9 @@ class RestoreDrill(models.Model):
     company_id = fields.Many2one(
         'res.company', required=True, default=lambda self: self.env.company,
     )
+    source = fields.Selection([
+        ('manual', 'Manual'), ('scheduled', 'Scheduled'),
+    ], default='manual', required=True, readonly=True)
     state = fields.Selection([
         ('draft', 'Draft'), ('running', 'Running'),
         ('passed', 'Passed'), ('failed', 'Failed'),
@@ -40,6 +45,7 @@ class RestoreDrill(models.Model):
         if protected.intersection(vals) and not self.env.su:
             raise UserError(_('Restore drill evidence is read-only.'))
         return super().write(vals)
+
     @api.constrains('sample_size')
     def _check_sample_size(self):
         for record in self:
@@ -76,6 +82,43 @@ class RestoreDrill(models.Model):
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },
         }
+
+    @api.model
+    def action_run_scheduled(self):
+        from ..services.pro_config import ProConfig
+        from ..services.restore_drill_service import RestoreDrillService
+
+        config = ProConfig(self.env)
+        if not config.restore_drill_enabled():
+            return 0
+        now = fields.Datetime.now()
+        last_run_value = config.restore_drill_last_run()
+        if last_run_value:
+            last_run = fields.Datetime.to_datetime(last_run_value)
+            due_at = last_run + timedelta(
+                days=config.restore_drill_interval_days(),
+            )
+            if now < due_at:
+                return 0
+
+        service = RestoreDrillService(self.env)
+        sample_size = config.restore_drill_sample_size()
+        created = 0
+        for company in self.env['res.company'].search([]):
+            if not service.candidates(company.id, 1):
+                continue
+            drill = self.sudo().create({
+                'company_id': company.id,
+                'sample_size': sample_size,
+                'source': 'scheduled',
+            })
+            service.run(drill)
+            created += 1
+        self.env['ir.config_parameter'].sudo().set_param(
+            config.RESTORE_DRILL_LAST_RUN,
+            fields.Datetime.to_string(now),
+        )
+        return created
 
 
 class RestoreDrillLine(models.Model):

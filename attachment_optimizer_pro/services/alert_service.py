@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 from odoo import _, fields
 
@@ -40,6 +41,15 @@ class AlertService:
             issues.append(_(
                 '%d mapping(s) with failed checksum verification'
             ) % verify_failed)
+
+        recent_drill_failure = env['attachment.restore.drill'].search_count([
+            ('state', '=', 'failed'),
+            ('run_at', '>=', fields.Datetime.now() - timedelta(hours=24)),
+        ])
+        if recent_drill_failure:
+            issues.append(_(
+                '%d restore drill(s) failed in the last 24 hours'
+            ) % recent_drill_failure)
         return issues
 
     def send_alert(self):

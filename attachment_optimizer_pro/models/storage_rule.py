@@ -52,7 +52,11 @@ class StorageRule(models.Model):
 
     @api.model
     def _resolve_rule(self, attachment):
-        rules = self.search([('active', '=', True)], order='sequence, id')
+        company = attachment.company_id or self.env.company
+        rules = self.search([
+            ('active', '=', True),
+            ('company_id', '=', company.id),
+        ], order='sequence, id')
         for rule in rules:
             if rule._matches(attachment):
                 return rule

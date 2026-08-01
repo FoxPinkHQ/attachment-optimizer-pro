@@ -143,6 +143,7 @@ class CleanupService:
 
     def run_batch(self, batch):
         candidates = self.eligible_mappings(
+            mappings=batch.mapping_ids if batch.mapping_ids else None,
             retention_days=batch.retention_days,
             company_id=batch.company_id.id if batch.company_id else False,
             limit=batch.limit,

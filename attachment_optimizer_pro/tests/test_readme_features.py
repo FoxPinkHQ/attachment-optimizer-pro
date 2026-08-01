@@ -1,4 +1,4 @@
-﻿import base64
+import base64
 import hashlib
 
 from odoo.exceptions import AccessError
@@ -86,7 +86,9 @@ class TestReadmeFeatures(TransactionCase):
         """Upload, verify (SHA-256) and finalize per attachment."""
         att = self._create_attachment()
         ops = MigrationService(self.env).create_migration_operations([att.id])
-        results = MigrationService(self.env).process_queue(batch_size=10)
+        results = MigrationService(self.env).process_queue(
+            batch_size=10, operation_ids=ops.ids,
+        )
         self.assertEqual(results['success'], 1)
         self.assertEqual(results['failed'], 0)
         ops.invalidate_recordset()
@@ -103,8 +105,10 @@ class TestReadmeFeatures(TransactionCase):
     def test_04_transparent_s3_serving_and_fallback(self):
         """Finalized attachments are served from S3 with filestore fallback."""
         att = self._create_attachment()
-        MigrationService(self.env).create_migration_operations([att.id])
-        MigrationService(self.env).process_queue(batch_size=10)
+        ops = MigrationService(self.env).create_migration_operations([att.id])
+        MigrationService(self.env).process_queue(
+            batch_size=10, operation_ids=ops.ids,
+        )
 
         binary = self.env['ir.binary']
         stream = binary._get_stream_from(att, 'datas')
@@ -121,8 +125,10 @@ class TestReadmeFeatures(TransactionCase):
     def test_05_audit_trail_immutable(self):
         """Full audit trail with immutable logs."""
         att = self._create_attachment()
-        MigrationService(self.env).create_migration_operations([att.id])
-        MigrationService(self.env).process_queue(batch_size=10)
+        ops = MigrationService(self.env).create_migration_operations([att.id])
+        MigrationService(self.env).process_queue(
+            batch_size=10, operation_ids=ops.ids,
+        )
 
         logs = self.env['attachment.audit.log'].search([
             ('attachment_id', '=', att.id),
@@ -140,9 +146,15 @@ class TestReadmeFeatures(TransactionCase):
 
     def test_06_dashboard_kpis(self):
         """Dashboard KPI overview: total, migrated, saved bytes, failed."""
+        before_kpi = (
+            self.env['attachment.storage.mapping']
+            .action_get_dashboard_data()
+        )
         att = self._create_attachment()
-        MigrationService(self.env).create_migration_operations([att.id])
-        MigrationService(self.env).process_queue(batch_size=10)
+        ops = MigrationService(self.env).create_migration_operations([att.id])
+        MigrationService(self.env).process_queue(
+            batch_size=10, operation_ids=ops.ids,
+        )
 
         kpi = self.env['attachment.storage.mapping'].action_get_dashboard_data()
         for key in (
@@ -151,7 +163,7 @@ class TestReadmeFeatures(TransactionCase):
         ):
             self.assertIn(key, kpi)
         self.assertGreaterEqual(kpi['migrated'], 1)
-        self.assertEqual(kpi['failed'], 0)
+        self.assertEqual(kpi['failed'], before_kpi['failed'])
         self.assertGreaterEqual(kpi['saved_bytes'], len(self.test_data))
 
     def test_07_batch_upload_limit(self):
@@ -167,11 +179,13 @@ class TestReadmeFeatures(TransactionCase):
         )
         ops = self.env['attachment.migration.operation'].search([
             ('state', '=', 'queued'),
+            ('attachment_id', 'in', attachments.ids),
         ])
         result = ops.action_upload()
         self.assertIn('3 success', result['params']['message'])
         finalized = self.env['attachment.migration.operation'].search_count([
             ('state', '=', 'finalized'),
+            ('attachment_id', 'in', attachments.ids),
         ])
         self.assertEqual(finalized, 3)
 
@@ -270,8 +284,10 @@ class TestReadmeFeatures(TransactionCase):
     def test_12_filestore_retained(self):
         """Migration does not delete the original filestore data."""
         att = self._create_attachment()
-        MigrationService(self.env).create_migration_operations([att.id])
-        MigrationService(self.env).process_queue(batch_size=10)
+        ops = MigrationService(self.env).create_migration_operations([att.id])
+        MigrationService(self.env).process_queue(
+            batch_size=10, operation_ids=ops.ids,
+        )
         att.invalidate_recordset()
         self.assertTrue(att.store_fname)
         self.assertTrue(att.datas)

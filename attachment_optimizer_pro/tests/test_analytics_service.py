@@ -19,6 +19,7 @@ class TestAnalyticsService(TransactionCase):
     def test_report_tracks_migrated_and_reclaimed(self):
         from odoo.addons.attachment_optimizer_pro.services.analytics_service \
             import AnalyticsService
+        before = AnalyticsService(self.env).get_report()
         bucket = self.env['attachment.storage.bucket'].create({
             'name': 'analytics-bucket',
             'is_default': True,
@@ -39,11 +40,15 @@ class TestAnalyticsService(TransactionCase):
             'bucket_id': bucket.id,
         })
         report = AnalyticsService(self.env).get_report()
-        self.assertEqual(report['reclaimed'], 1)
-        self.assertEqual(report['migrated'], 1)
+        self.assertEqual(report['reclaimed'] - before['reclaimed'], 1)
+        self.assertEqual(report['migrated'] - before['migrated'], 1)
         self.assertEqual(
             report['migration_pct'],
             round(report['migrated_bytes'] / report['total_bytes'] * 100, 1),
         )
-        self.assertEqual(len(report['buckets']), 1)
-        self.assertEqual(report['buckets'][0]['bucket'], bucket.name)
+        bucket_rows = [
+            row for row in report['buckets']
+            if row['bucket'] == bucket.name
+        ]
+        self.assertEqual(len(bucket_rows), 1)
+        self.assertEqual(bucket_rows[0]['count'], 1)

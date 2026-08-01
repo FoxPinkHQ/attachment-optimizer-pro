@@ -43,6 +43,7 @@ class TestCleanupService(TransactionCase):
         batch = self.env['attachment.cleanup.batch'].create({
             'retention_days': 0,
             'quarantine_days': 7,
+            'mapping_ids': [(6, 0, self.mapping.ids)],
         })
         target = (
             'odoo.addons.attachment_optimizer_pro.services.cleanup_service.'

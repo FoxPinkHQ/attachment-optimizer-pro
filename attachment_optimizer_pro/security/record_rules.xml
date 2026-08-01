@@ -30,5 +30,14 @@
             <field name="model_id" ref="model_attachment_restore_batch"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
-    </data>
+        <record id="rule_restore_drill_company" model="ir.rule">
+            <field name="name">Restore Drill: multi-company isolation</field>
+            <field name="model_id" ref="model_attachment_restore_drill"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_restore_drill_line_company" model="ir.rule">
+            <field name="name">Restore Drill Result: multi-company isolation</field>
+            <field name="model_id" ref="model_attachment_restore_drill_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>    </data>
 </odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="attachment_optimizer_pro_restore_drill_list" model="ir.ui.view">
+        <field name="name">attachment.restore.drill.list</field>
+        <field name="model">attachment.restore.drill</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'passed'"
+                       decoration-danger="state == 'failed'"
+                       decoration-info="state == 'running'"/>
+                <field name="sample_size"/>
+                <field name="tested"/>
+                <field name="passed"/>
+                <field name="failed"/>
+                <field name="verified_display"/>
+                <field name="run_at"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="attachment_optimizer_pro_restore_drill_form" model="ir.ui.view">
+        <field name="name">attachment.restore.drill.form</field>
+        <field name="model">attachment.restore.drill</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" string="Run Restore Drill"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-shield"/>
+                        The drill downloads a random sample and verifies SHA-256.
+                        It never changes the attachment or cleanup state.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="company_id" readonly="state != 'draft'"
+                                   groups="base.group_multi_company"/>
+                            <field name="sample_size" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Evidence">
+                            <field name="tested"/>
+                            <field name="passed"/>
+                            <field name="failed"/>
+                            <field name="verified_display"/>
+                            <field name="run_at"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" nolabel="1" invisible="state == 'draft'">
+                        <tree create="false" delete="false">
+                            <field name="attachment_id"/>
+                            <field name="result" widget="badge"
+                                   decoration-success="result == 'pass'"
+                                   decoration-danger="result == 'fail'"/>
+                            <field name="verified_bytes"/>
+                            <field name="expected_checksum" optional="hide"/>
+                            <field name="actual_checksum" optional="hide"/>
+                            <field name="error_message"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="attachment_optimizer_pro_restore_drill_action" model="ir.actions.act_window">
+        <field name="name">Restore Drills</field>
+        <field name="res_model">attachment.restore.drill</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help">Prove that sampled cleaned attachments remain recoverable from S3.</field>
+    </record>
+</odoo>

@@ -25,7 +25,13 @@
                             <div class="text-muted">Used only for dashboard estimates. Savings equal reclaimed local GiB multiplied by this monthly rate.</div>
                             <field name="pro_local_storage_cost_per_gib"/>
                         </div></div>
-                    </div>                    <h3>Background Processing</h3>
+                    </div>                    <h3>Scheduled Restore Assurance</h3>
+                    <div class="row mt16 o_settings_container" name="pro_restore_drill_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="pro_restore_drill_enabled_setting"><div class="o_setting_left_pane"><field name="pro_restore_drill_enabled"/></div><div class="o_setting_right_pane"><label for="pro_restore_drill_enabled" string="Enable Scheduled Restore Drills"/><div class="text-muted">Periodically download and verify a company-scoped sample without changing attachments or cleanup state.</div></div></div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="pro_restore_drill_sample_size_setting"><div class="o_setting_right_pane"><label for="pro_restore_drill_sample_size" string="Sample Size per Company"/><div class="text-muted">Eligible cleaned or quarantined objects verified for each company.</div><field name="pro_restore_drill_sample_size"/></div></div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="pro_restore_drill_interval_setting"><div class="o_setting_right_pane"><label for="pro_restore_drill_interval_days" string="Drill Interval (days)"/><div class="text-muted">Minimum days between scheduled restore-assurance runs.</div><field name="pro_restore_drill_interval_days"/></div></div>
+                    </div>
+                    <h3>Background Processing</h3>
                     <div class="row mt16 o_settings_container" name="pro_background_setting_container"><div class="col-12 col-lg-6 o_setting_box" id="pro_concurrency_setting"><div class="o_setting_right_pane"><label for="pro_concurrency" string="Routing Concurrency"/><div class="text-muted">Maximum routed operations processed per cron run.</div><field name="pro_concurrency"/></div></div></div>
                     <h3>Operational Alerts</h3>
                     <div class="row mt16 o_settings_container" name="pro_alert_setting_container">

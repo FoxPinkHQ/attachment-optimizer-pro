@@ -50,6 +50,18 @@
             <field name="active" eval="True"/>
         </record>
 
+        <!-- Scheduled recovery assurance: read-only restore verification -->
+        <record id="ir_cron_pro_restore_drill" model="ir.cron">
+            <field name="name">Attachment Optimizer Pro - Restore Assurance</field>
+            <field name="model_id" ref="model_attachment_restore_drill"/>
+            <field name="state">code</field>
+            <field name="code">model.action_run_scheduled()</field>
+            <field name="interval_number" eval="1"/>
+            <field name="interval_type">days</field>
+            <field name="nextcall" eval="DateTime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="active" eval="True"/>
+        </record>
+
     </data>
 
 </odoo>

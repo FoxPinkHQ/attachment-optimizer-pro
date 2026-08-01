@@ -93,6 +93,34 @@
 .o_pro_savings_metrics span { display: block; color: var(--o-gray-600, #6c757d); font-size: .8rem; }
 .o_pro_savings_metrics strong { display: block; margin-top: 4px; font-size: 1.35rem; }
 .o_pro_savings_note { color: #475569; font-size: .75rem; }
+.o_pro_assurance_panel {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #dee2e6;
+    border-left: 4px solid var(--o-brand-primary, #714b67);
+    border-radius: 8px;
+    background: var(--o-view-background-color, #fff);
+}
+.o_pro_assurance_header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+.o_pro_assurance_header h3 { font-size: 1rem; font-weight: 600; }
+.o_pro_assurance_header .btn { min-height: 44px; }
+.o_pro_assurance_metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+.o_pro_assurance_metrics > div { min-width: 0; padding-right: 12px; border-right: 1px solid #eef0f2; }
+.o_pro_assurance_metrics > div:last-child { border-right: 0; }
+.o_pro_assurance_metrics span { display: block; color: var(--o-gray-600, #6c757d); font-size: .8rem; }
+.o_pro_assurance_metrics strong { display: block; margin-top: 4px; overflow-wrap: anywhere; }
+.o_pro_assurance_hint { margin-top: 12px; color: #854d0e; font-size: .8rem; }
+.o_pro_assurance_error { color: #b42318; }
 .o_pro_dashboard_columns { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
 .o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #dee2e6; border-radius: 8px; padding: 16px; }
 .o_pro_panel_header { align-items: center; margin-bottom: 12px; }
@@ -112,9 +140,14 @@
     .o_pro_kpi_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .o_pro_dashboard_columns { grid-template-columns: 1fr; }
     .o_pro_savings_metrics { grid-template-columns: 1fr; }
+    .o_pro_assurance_header { flex-direction: column; }
+    .o_pro_assurance_header .btn { width: 100%; }
+    .o_pro_assurance_metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .o_pro_assurance_metrics > div { border-right: 0; }
 }
 @media (max-width: 480px) {
     .o_pro_kpi_grid { grid-template-columns: 1fr; }
+    .o_pro_assurance_metrics { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
     .o_pro_kpi_action { transition: none; }

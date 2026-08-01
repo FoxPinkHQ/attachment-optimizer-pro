@@ -1,6 +1,6 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """
@@ -13,6 +13,8 @@
     "support": "aduy000@gmail.com",
     "website": "https://github.com/FoxPinkHQ/attachment-optimizer-pro",
     "license": "LGPL-3",
+    "price": 49.0,
+    "currency": "USD",
     "images": [
         "static/description/preview.png",
     ],

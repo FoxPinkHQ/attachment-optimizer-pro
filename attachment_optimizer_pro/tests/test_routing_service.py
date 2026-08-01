@@ -1,3 +1,8 @@
+from unittest.mock import Mock, patch
+
+from botocore.exceptions import ClientError
+from psycopg2 import IntegrityError
+
 from odoo.tests import TransactionCase
 
 
@@ -28,6 +33,30 @@ class TestRoutingService(TransactionCase):
     def test_rule_matches_mime_type(self):
         att = self._make_attachment()
         self.assertTrue(self.rule._matches(att))
+
+    def test_missing_object_head_does_not_retry(self):
+        from odoo.addons.attachment_optimizer_pro.services.s3_bridge import (
+            ProS3Bridge,
+        )
+
+        client = Mock()
+        client.head_object.side_effect = ClientError(
+            {'Error': {'Code': '404', 'Message': 'Not Found'}},
+            'HeadObject',
+        )
+        bridge = ProS3Bridge(self.env)
+        target = (
+            'odoo.addons.attachment_optimizer_pro.services.s3_bridge.'
+            'ProS3Bridge._get_client'
+        )
+        with patch(target, return_value=client):
+            self.assertFalse(bridge.head('bucket', 'missing-key', config={}))
+        client.head_object.assert_called_once_with(
+            Bucket='bucket', Key='missing-key',
+        )
+    def test_bucket_name_must_be_unique(self):
+        with self.assertRaises(IntegrityError), self.env.cr.savepoint():
+            self.Bucket.create({'name': self.bucket.name})
 
     def test_rule_does_not_match_wrong_mime(self):
         att = self._make_attachment(mimetype='image/png')

@@ -1,4 +1,7 @@
+from dateutil.relativedelta import relativedelta
+
 from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class StoragePolicy(models.Model):
@@ -56,6 +59,27 @@ class StoragePolicy(models.Model):
     last_run = fields.Datetime(string='Last Run', readonly=True)
     last_result = fields.Char(string='Last Result', readonly=True)
 
+    @api.constrains('interval_number')
+    def _check_interval_number(self):
+        for policy in self:
+            if policy.interval_number < 1:
+                raise ValidationError(_(
+                    'Repeat Every must be at least 1. Enter a positive '
+                    'schedule interval.'
+                ))
+
+    def _is_due(self, now=None):
+        self.ensure_one()
+        if not self.schedule_enabled:
+            return False
+        if not self.last_run:
+            return True
+        now = now or fields.Datetime.now()
+        interval = max(1, self.interval_number)
+        due_at = self.last_run + relativedelta(**{
+            self.interval_type or 'days': interval,
+        })
+        return due_at <= now
     def _matches(self, attachment):
         self.ensure_one()
         if self.res_model_id and attachment.res_model != self.res_model_id.model:
@@ -87,13 +111,21 @@ class StoragePolicy(models.Model):
         self.ensure_one()
         from ..services.policy_engine import PolicyEngine
         report = PolicyEngine(self.env).run_policy(self)
+        processed = report['migrate'] + report['restore'] + report['cleanup']
+        notification_type = (
+            'warning' if report['failed'] else
+            'success' if processed else 'info'
+        )
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Policy Executed'),
+                'title': _(
+                    'Policy Completed with Errors'
+                    if report['failed'] else 'Policy Complete'
+                ),
                 'message': report['summary'],
-                'type': 'success',
+                'type': notification_type,
                 'sticky': False,
             },
         }

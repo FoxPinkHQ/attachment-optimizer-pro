@@ -63,7 +63,7 @@ class AlertService:
             '<li>%s</li>' % issue for issue in issues
         )
         self.env['mail.mail'].sudo().create({
-            'subject': _('Attachment Optimizer Pro — Operational Alert'),
+            'subject': _('Attachment Optimizer Pro - Operational Alert'),
             'body_html': body,
             'email_from': email_from,
             'email_to': recipient,

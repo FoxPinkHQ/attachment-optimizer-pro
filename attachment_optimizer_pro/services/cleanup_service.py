@@ -105,7 +105,10 @@ class CleanupService:
 
     def run_mappings(self, batch, mappings):
         if batch.state != 'draft':
-            raise UserError(_('This cleanup batch has already been processed.'))
+            raise UserError(_(
+                'Only draft cleanup batches can run. Create a new batch to '
+                'clean additional local copies.'
+            ))
         batch.write({
             'state': 'running',
             'started_at': fields.Datetime.now(),

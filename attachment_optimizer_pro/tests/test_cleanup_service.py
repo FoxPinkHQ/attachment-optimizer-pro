@@ -1,6 +1,8 @@
 import base64
 import hashlib
+from unittest.mock import patch
 
+from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
 
@@ -31,6 +33,26 @@ class TestCleanupService(TransactionCase):
             'bucket_id': self.bucket.id,
         })
 
+    def test_cleanup_wizard_rejects_empty_selection(self):
+        wizard = self.env['attachment.cleanup.confirm'].new({
+            'mapping_ids': [(6, 0, [])],
+        })
+        with self.assertRaisesRegex(UserError, 'No local copies are eligible'):
+            wizard.action_confirm()
+    def test_cleanup_action_warns_when_a_mapping_fails(self):
+        batch = self.env['attachment.cleanup.batch'].create({
+            'retention_days': 0,
+            'quarantine_days': 7,
+        })
+        target = (
+            'odoo.addons.attachment_optimizer_pro.services.cleanup_service.'
+            'CleanupService.cleanup_mapping'
+        )
+        with patch(target, side_effect=RuntimeError('simulated failure')):
+            action = batch.action_run()
+        self.assertEqual(batch.failed, 1)
+        self.assertEqual(action['params']['type'], 'warning')
+        self.assertIn('Review the batch details', action['params']['message'])
     def test_cleanup_removes_local_copy_after_verification(self):
         from odoo.addons.attachment_optimizer_pro.services.cleanup_service \
             import CleanupService

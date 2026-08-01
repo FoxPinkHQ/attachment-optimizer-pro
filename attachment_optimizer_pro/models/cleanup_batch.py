@@ -53,22 +53,30 @@ class CleanupBatch(models.Model):
     def action_run(self):
         self.ensure_one()
         if self.state != 'draft':
-            raise UserError(_('This cleanup batch has already been processed.'))
+            raise UserError(_(
+                'Only draft cleanup batches can run. Create a new batch to '
+                'clean additional local copies.'
+            ))
         from ..services.cleanup_service import CleanupService
         CleanupService(self.env).run_batch(self)
+        has_failures = bool(self.failed)
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Cleanup Complete'),
+                'title': _(
+                    'Cleanup Completed with Errors'
+                    if has_failures else 'Cleanup Complete'
+                ),
                 'message': _(
-                    '%(cleaned)d cleaned, %(skipped)d skipped, %(failed)d failed'
+                    '%(cleaned)d cleaned, %(skipped)d skipped, %(failed)d '
+                    'failed. Review the batch details before continuing.'
                 ) % {
                     'cleaned': self.cleaned,
                     'skipped': self.skipped,
                     'failed': self.failed,
                 },
-                'type': 'success',
+                'type': 'warning' if has_failures else 'success',
                 'sticky': False,
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },

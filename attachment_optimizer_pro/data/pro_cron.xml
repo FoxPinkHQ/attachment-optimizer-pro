@@ -4,7 +4,7 @@
 
         <!-- Routing engine: processes routed draft operations -->
         <record id="ir_cron_pro_routing" model="ir.cron">
-            <field name="name">Attachment Optimizer Pro — Routing Engine</field>
+            <field name="name">Attachment Optimizer Pro - Routing Engine</field>
             <field name="model_id" ref="model_attachment_storage_rule"/>
             <field name="state">code</field>
             <field name="code">model.action_process_routed()</field>
@@ -16,7 +16,7 @@
 
         <!-- Safe cleanup: reclaims filestore space when enabled -->
         <record id="ir_cron_pro_cleanup" model="ir.cron">
-            <field name="name">Attachment Optimizer Pro — Safe Cleanup</field>
+            <field name="name">Attachment Optimizer Pro - Safe Cleanup</field>
             <field name="model_id" ref="model_attachment_cleanup_batch"/>
             <field name="state">code</field>
             <field name="code">model.action_run_auto_cleanup()</field>
@@ -28,19 +28,19 @@
 
         <!-- Lifecycle policies -->
         <record id="ir_cron_pro_policies" model="ir.cron">
-            <field name="name">Attachment Optimizer Pro — Lifecycle Policies</field>
+            <field name="name">Attachment Optimizer Pro - Lifecycle Policies</field>
             <field name="model_id" ref="model_attachment_storage_policy"/>
             <field name="state">code</field>
             <field name="code">model.action_run_policies()</field>
-            <field name="interval_number" eval="1"/>
-            <field name="interval_type">hours</field>
+            <field name="interval_number" eval="5"/>
+            <field name="interval_type">minutes</field>
             <field name="nextcall" eval="DateTime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
             <field name="active" eval="True"/>
         </record>
 
         <!-- Operational alerts -->
         <record id="ir_cron_pro_alerts" model="ir.cron">
-            <field name="name">Attachment Optimizer Pro — Operational Alerts</field>
+            <field name="name">Attachment Optimizer Pro - Operational Alerts</field>
             <field name="model_id" ref="model_attachment_audit_log"/>
             <field name="state">code</field>
             <field name="code">model.action_send_alert()</field>
@@ -51,4 +51,5 @@
         </record>
 
     </data>
+
 </odoo>

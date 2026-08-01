@@ -62,8 +62,16 @@ class ProS3Bridge(S3Bridge):
         cfg = self._client_config(bucket, config)
 
         def _do_head():
-            self._get_client(cfg).head_object(Bucket=bucket, Key=key)
-            return True
+            from botocore.exceptions import ClientError
+
+            try:
+                self._get_client(cfg).head_object(Bucket=bucket, Key=key)
+                return True
+            except ClientError as error:
+                code = str(error.response.get('Error', {}).get('Code', ''))
+                if code in ('404', 'NoSuchKey', 'NotFound'):
+                    return False
+                raise
 
         try:
             return self._retry_call(_do_head)

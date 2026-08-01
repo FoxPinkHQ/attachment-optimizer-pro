@@ -20,7 +20,10 @@ class RestoreService:
     def restore_mapping(self, mapping):
         mp = mapping
         if mp.status != 'finalized':
-            raise UserError(_('Only finalized mappings can be restored.'))
+            raise UserError(_(
+                'This attachment is not ready to restore. Wait until its '
+                'storage mapping is finalized, then try again.'
+            ))
         bucket = mp.bucket_id
         config = bucket._s3_config() if bucket else None
         data = self._bridge.get_object(
@@ -56,7 +59,10 @@ class RestoreService:
 
     def run_batch(self, batch):
         if batch.state != 'draft':
-            raise UserError(_('This restore batch has already been processed.'))
+            raise UserError(_(
+                'Only draft restore batches can run. Create a new batch to '
+                'restore additional attachments.'
+            ))
         if batch.mapping_ids:
             candidates = batch.mapping_ids
         else:

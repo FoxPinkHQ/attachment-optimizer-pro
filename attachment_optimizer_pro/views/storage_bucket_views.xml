@@ -5,7 +5,7 @@
         <field name="name">attachment.storage.bucket.tree</field>
         <field name="model">attachment.storage.bucket</field>
         <field name="arch" type="xml">
-            <list>
+            <list create="true" import="false" export_xlsx="false">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="provider"/>
@@ -48,9 +48,10 @@
                         <field name="access_key_id"/>
                         <field name="secret_access_key" password="true"/>
                         <div class="text-muted">
-                            Test the connection before saving. Credentials are
-                            stored as system parameters and never appear in
-                            audit logs.
+                            Test the connection before use. Credentials are
+                            restricted to Storage Optimization Managers and
+                            never appear in audit logs. Leave them blank to
+                            use the runtime IAM role or credential provider.
                         </div>
                     </group>
                 </sheet>

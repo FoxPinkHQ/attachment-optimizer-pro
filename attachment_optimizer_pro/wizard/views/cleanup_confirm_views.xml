@@ -11,12 +11,24 @@
                     after</strong> SHA-256 checksum verification against the
                     S3 object. Restore from S3 remains possible at any time.
                 </div>
-                <group>
-                    <group>
+                <div class="alert alert-info" role="alert"
+                     invisible="count != 0">
+                    No selected mappings are eligible. Choose finalized
+                    mappings that have completed the retention period.
+                </div>                <group>
+                    <div class="alert alert-info" role="alert"
+                     invisible="count != 0">
+                    No selected mappings are eligible. Choose finalized
+                    mappings that have completed the retention period.
+                </div>                <group>
                         <field name="count"/>
                         <field name="estimated_display"/>
                     </group>
-                    <group>
+                    <div class="alert alert-info" role="alert"
+                     invisible="count != 0">
+                    No selected mappings are eligible. Choose finalized
+                    mappings that have completed the retention period.
+                </div>                <group>
                         <field name="retention_days"/>
                         <field name="quarantine_days"/>
                     </group>
@@ -29,7 +41,7 @@
                 </field>
                 <footer>
                     <button name="action_confirm" string="Confirm Cleanup"
-                            type="object" class="btn-primary"/>
+                            type="object" class="btn-primary" invisible="count == 0"/>
                     <button string="Cancel" class="btn-secondary"
                             special="cancel"/>
                 </footer>

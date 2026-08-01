@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
 
@@ -29,6 +32,26 @@ class TestRestoreService(TransactionCase):
             'bucket_id': self.bucket.id,
         })
 
+    def test_restore_wizard_rejects_empty_selection(self):
+        wizard = self.env['attachment.restore.confirm'].new({
+            'mapping_ids': [(6, 0, [])],
+        })
+        with self.assertRaisesRegex(UserError, 'No attachments are ready'):
+            wizard.action_confirm()
+    def test_restore_action_warns_when_a_mapping_fails(self):
+        mapping = self._make_mapping(cleanup_state='cleaned')
+        batch = self.env['attachment.restore.batch'].create({
+            'mapping_ids': [(6, 0, mapping.ids)],
+        })
+        target = (
+            'odoo.addons.attachment_optimizer_pro.services.restore_service.'
+            'RestoreService.restore_mapping'
+        )
+        with patch(target, side_effect=RuntimeError('simulated failure')):
+            action = batch.action_run()
+        self.assertEqual(batch.failed, 1)
+        self.assertEqual(action['params']['type'], 'warning')
+        self.assertIn('retry failed attachments', action['params']['message'])
     def test_find_restore_candidates(self):
         from odoo.addons.attachment_optimizer_pro.services.restore_service \
             import RestoreService
@@ -45,7 +68,6 @@ class TestRestoreService(TransactionCase):
 
     def test_restore_requires_finalized_mapping(self):
         from odoo.tests.common import tagged
-        from odoo.exceptions import UserError
         from odoo.addons.attachment_optimizer_pro.services.restore_service \
             import RestoreService
         att = self.env['ir.attachment'].create({
@@ -62,4 +84,7 @@ class TestRestoreService(TransactionCase):
             'status': 'uploaded',
         })
         service = RestoreService(self.env)
-        self.assertRaises(UserError, service.restore_mapping, mp)
+        with self.assertRaisesRegex(
+            UserError, 'Wait until its storage mapping is finalized'
+        ):
+            service.restore_mapping(mp)

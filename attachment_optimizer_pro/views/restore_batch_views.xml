@@ -5,7 +5,7 @@
         <field name="name">attachment.restore.batch.tree</field>
         <field name="model">attachment.restore.batch</field>
         <field name="arch" type="xml">
-            <list create="false">
+            <list create="false" import="false" export_xlsx="true">
                 <field name="name"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'running'"
@@ -66,7 +66,7 @@
                     </group>
                     <group string="Processed Mappings">
                         <field name="mapping_ids" nolabel="1">
-                            <list>
+                            <list create="false" delete="false">
                                 <field name="attachment_id"/>
                                 <field name="cleanup_state" widget="badge"/>
                                 <field name="restored_at"/>

@@ -1,4 +1,5 @@
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class RestoreConfirm(models.TransientModel):
@@ -29,6 +30,11 @@ class RestoreConfirm(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
+        if not self.mapping_ids:
+            raise UserError(_(
+                'No attachments are ready to restore. Select finalized '
+                'mappings whose local copies are quarantined or removed.'
+            ))
         from ..services.restore_service import RestoreService
         batch = self.env['attachment.restore.batch'].create({
             'state': 'draft',
@@ -46,7 +52,7 @@ class RestoreConfirm(models.TransientModel):
                     'restored': batch.restored,
                     'failed': batch.failed,
                 },
-                'type': 'success',
+                'type': 'warning' if batch.failed else 'success',
                 'sticky': False,
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },

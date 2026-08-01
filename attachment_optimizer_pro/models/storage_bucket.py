@@ -37,10 +37,10 @@ class StorageBucket(models.Model):
     )
     active = fields.Boolean(string='Active', default=True)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)',
-         'A bucket profile with this name already exists.'),
-    ]
+    _name_uniq = models.Constraint(
+        'unique(name)',
+        'A bucket profile with this name already exists.',
+    )
 
     @api.constrains('is_default')
     def _check_single_default(self):

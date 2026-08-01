@@ -5,7 +5,7 @@
         <field name="name">attachment.storage.rule.tree</field>
         <field name="model">attachment.storage.rule</field>
         <field name="arch" type="xml">
-            <list>
+            <list create="true" import="true" export_xlsx="true">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="res_model_id"/>

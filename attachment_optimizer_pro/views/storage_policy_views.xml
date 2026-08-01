@@ -5,7 +5,7 @@
         <field name="name">attachment.storage.policy.tree</field>
         <field name="model">attachment.storage.policy</field>
         <field name="arch" type="xml">
-            <list>
+            <list create="true" import="true" export_xlsx="true">
                 <field name="name"/>
                 <field name="action" widget="badge"
                        decoration-info="action in ('migrate','archive')"

@@ -10,7 +10,12 @@
                     Verified objects will be re-downloaded from S3 back into
                     the Odoo filestore.
                 </div>
-                <group>
+                <div class="alert alert-info" role="alert"
+                     invisible="count != 0">
+                    No selected mappings are ready to restore. Choose
+                    finalized mappings marked Quarantined or Local Copy
+                    Removed.
+                </div>                <group>
                     <field name="count"/>
                 </group>
                 <field name="mapping_ids" nolabel="1">
@@ -21,7 +26,7 @@
                 </field>
                 <footer>
                     <button name="action_confirm" string="Confirm Restore"
-                            type="object" class="btn-primary"/>
+                            type="object" class="btn-primary" invisible="count == 0"/>
                     <button string="Cancel" class="btn-secondary"
                             special="cancel"/>
                 </footer>

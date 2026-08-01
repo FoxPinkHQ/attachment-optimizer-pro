@@ -50,21 +50,29 @@ class RestoreBatch(models.Model):
     def action_run(self):
         self.ensure_one()
         if self.state != 'draft':
-            raise UserError(_('This restore batch has already been processed.'))
+            raise UserError(_(
+                'Only draft restore batches can run. Create a new batch to '
+                'restore additional attachments.'
+            ))
         from ..services.restore_service import RestoreService
         RestoreService(self.env).run_batch(self)
+        has_failures = bool(self.failed)
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Restore Complete'),
+                'title': _(
+                    'Restore Completed with Errors'
+                    if has_failures else 'Restore Complete'
+                ),
                 'message': _(
-                    '%(restored)d restored, %(failed)d failed'
+                    '%(restored)d restored, %(failed)d failed. Review the '
+                    'batch details and retry failed attachments.'
                 ) % {
                     'restored': self.restored,
                     'failed': self.failed,
                 },
-                'type': 'success',
+                'type': 'warning' if has_failures else 'success',
                 'sticky': False,
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },

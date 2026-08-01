@@ -25,14 +25,26 @@ class PolicyEngine:
         if policy.action in ('migrate', 'archive'):
             report['migrate'] = self._migrate(policy)
         if policy.action == 'restore':
-            report['restore'] = self._restore(policy)
+            report['restore'], failed = self._restore(policy)
+            report['failed'] += failed
         if policy.action in ('cleanup', 'archive'):
-            report['cleanup'] = self._cleanup(policy)
-        report['summary'] = ', '.join(
-            '%s=%d' % (key, val)
-            for key, val in report.items() if key != 'summary'
-        )
-        policy.write({'last_run': fields.Datetime.now()})
+            report['cleanup'], failed = self._cleanup(policy)
+            report['failed'] += failed
+        processed = report['migrate'] + report['restore'] + report['cleanup']
+        if not processed and not report['failed']:
+            report['summary'] = _(
+                'No attachments matched this policy. Review the filters or '
+                'run it again when eligible attachments are available.'
+            )
+        else:
+            report['summary'] = _(
+                'Queued %(migrate)d, restored %(restore)d, cleaned '
+                '%(cleanup)d, failed %(failed)d.'
+            ) % report
+        policy.write({
+            'last_run': fields.Datetime.now(),
+            'last_result': report['summary'],
+        })
         return report
 
     def _migrate(self, policy):
@@ -93,6 +105,7 @@ class PolicyEngine:
             limit=policy.batch_limit,
         )
         count = 0
+        failed = 0
         for mp in candidates:
             if not policy._matches(mp.attachment_id.sudo()):
                 continue
@@ -101,7 +114,8 @@ class PolicyEngine:
                 count += 1
             except Exception:
                 _logger.exception('Policy restore failed for mapping %s', mp.id)
-        return count
+                failed += 1
+        return count, failed
 
     def _cleanup(self, policy):
         service = CleanupService(self.env)
@@ -111,6 +125,7 @@ class PolicyEngine:
             limit=policy.batch_limit,
         )
         count = 0
+        failed = 0
         for mp in candidates:
             try:
                 result = service.cleanup_mapping(mp)
@@ -118,13 +133,15 @@ class PolicyEngine:
                     count += 1
             except Exception:
                 _logger.exception('Policy cleanup failed for mapping %s', mp.id)
-        return count
+                failed += 1
+        return count, failed
 
     def run_all(self):
         policies = self.env['attachment.storage.policy'].search([
             ('active', '=', True),
+            ('schedule_enabled', '=', True),
         ])
-        for policy in policies:
+        for policy in policies.filtered(lambda item: item._is_due()):
             try:
                 report = self.run_policy(policy)
                 policy.write({'last_result': report['summary']})

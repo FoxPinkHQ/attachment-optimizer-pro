@@ -1,11 +1,12 @@
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class CleanupConfirm(models.TransientModel):
     _name = 'attachment.cleanup.confirm'
     _description = 'Confirm Safe Local Copy Cleanup'
 
-    count = fields.Integer(string='Eligible Mappings', readonly=True)
+    count = fields.Integer(string='Eligible Mapping Count', readonly=True)
     estimated_bytes = fields.Integer(string='Estimated Reclaim', readonly=True)
     estimated_display = fields.Char(
         string='Estimated Reclaimed Space', readonly=True,
@@ -46,6 +47,11 @@ class CleanupConfirm(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
+        if not self.mapping_ids:
+            raise UserError(_(
+                'No local copies are eligible for cleanup. Select finalized '
+                'mappings that have completed the retention period.'
+            ))
         from ..services.cleanup_service import CleanupService
         batch = self.env['attachment.cleanup.batch'].create({
             'retention_days': self.retention_days,
@@ -65,7 +71,7 @@ class CleanupConfirm(models.TransientModel):
                     'skipped': batch.skipped,
                     'failed': batch.failed,
                 },
-                'type': 'success',
+                'type': 'warning' if batch.failed else 'success',
                 'sticky': False,
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },

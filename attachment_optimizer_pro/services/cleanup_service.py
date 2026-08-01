@@ -76,17 +76,42 @@ class CleanupService:
             })
             return {'reclaimed': 0, 'changed': True, 'skipped': False}
 
-        actual = hashlib.sha256(local).hexdigest()
-        if mapping.checksum_sha256 and actual != mapping.checksum_sha256:
+        def skip(reason):
             self.env['attachment.audit.log']._log(
-                'cleanup', result='failure',
-                attachment_id=att.id,
-                attachment_name=att.name,
-                mapping_id=mapping.id,
-                error_message='Checksum mismatch before cleanup',
+                'cleanup', result='failure', attachment_id=att.id,
+                attachment_name=att.name, mapping_id=mapping.id,
+                error_message=reason,
             )
-            return {'reclaimed': 0, 'changed': False, 'skipped': True}
+            return {
+                'reclaimed': 0, 'changed': False, 'skipped': True,
+                'reason': reason,
+            }
 
+        if not mapping.checksum_sha256:
+            return skip('Missing SHA-256; local copy preserved')
+
+        actual = hashlib.sha256(local).hexdigest()
+        if actual != mapping.checksum_sha256:
+            return skip('Local checksum mismatch; local copy preserved')
+
+        bucket = mapping.bucket_id
+        config = bucket._s3_config() if bucket else None
+        try:
+            remote_verified = self._bridge.verify(
+                mapping.s3_bucket, mapping.s3_key,
+                mapping.checksum_sha256, config=config,
+            )
+        except Exception:
+            _logger.exception(
+                'Remote verification failed before cleanup for mapping %s',
+                mapping.id,
+            )
+            remote_verified = False
+        if not remote_verified:
+            return skip(
+                'Remote object unavailable or checksum mismatch; '
+                'local copy preserved'
+            )
         size = att.file_size or 0
         now = fields.Datetime.now()
         att.datas = False

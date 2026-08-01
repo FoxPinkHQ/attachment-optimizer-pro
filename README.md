@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 14.0.1.0.4 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
+**Version:** 14.0.1.0.5 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0**
 
 ---
 
@@ -101,7 +101,7 @@ Restore when required
 
 ### Safety
 
-- **Verified cleanup** — local SHA-256 must match the finalized object before removal
+- **Verified cleanup** — cleanup requires SHA-256 and re-verifies both the local copy and live S3 object immediately before removal
 - **Retention and quarantine** — delay cleanup and keep mappings recoverable
 - **One-click restore** — restore through Odoo's standard binary writer
 - **Actionable errors** — failed and empty operations return clear operator guidance

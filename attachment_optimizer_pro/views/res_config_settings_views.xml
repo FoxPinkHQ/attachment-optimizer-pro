@@ -12,7 +12,8 @@
                 <attribute name="data-string">Attachment Optimizer Pro</attribute>
                 <attribute name="string">Attachment Optimizer Pro</attribute>
                 <attribute name="logo">/attachment_optimizer_pro/static/description/icon.png</attribute>
-            </xpath>            <xpath expr="//app[@name='attachment_optimizer']" position="inside">
+            </xpath>
+            <xpath expr="//app[@name='attachment_optimizer']" position="inside">
                 <div id="pro_features">
                     <block title="Pro Features" name="pro_features_setting_container">
 
@@ -40,6 +41,15 @@
                             <field name="pro_cleanup_quarantine_days"/>
                         </setting>
 
+                        <setting type="header" string="Savings Estimate"/>
+                        <setting id="pro_local_storage_cost_setting"
+                                 string="Local Storage Cost (USD/GiB/month)"
+                                 help="Your effective local or hosting storage cost. Used only for dashboard estimates; no billing data is collected.">
+                            <field name="pro_local_storage_cost_per_gib"/>
+                            <div class="text-muted">
+                                Savings estimates equal reclaimed local GiB × this monthly rate.
+                            </div>
+                        </setting>
                         <setting type="header" string="Background Processing"/>
                         <setting id="pro_concurrency_setting" string="Routing Concurrency"
                                  help="Maximum routed operations processed per cron run.">

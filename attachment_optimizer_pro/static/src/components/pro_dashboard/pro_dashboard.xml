@@ -67,6 +67,35 @@
                 </button>
             </div>
 
+            <section class="o_pro_savings_panel" aria-labelledby="savings-title">
+                <div class="o_pro_savings_intro">
+                    <div>
+                        <h3 id="savings-title">Estimated storage savings</h3>
+                        <p class="text-muted mb-0">
+                            Based on your configured local storage rate:
+                            <strong t-esc="state.analytics.savings.cost_display"/>.
+                        </p>
+                    </div>
+                    <i class="fa fa-line-chart" aria-hidden="true"/>
+                </div>
+                <div class="o_pro_savings_metrics">
+                    <div>
+                        <span>Already avoided / month</span>
+                        <strong t-esc="state.analytics.savings.reclaimed_monthly_display"/>
+                    </div>
+                    <div>
+                        <span>Additional eligible / month</span>
+                        <strong t-esc="state.analytics.savings.reclaimable_monthly_display"/>
+                    </div>
+                    <div>
+                        <span>Total potential / year</span>
+                        <strong t-esc="state.analytics.savings.potential_annual_display"/>
+                    </div>
+                </div>
+                <p class="o_pro_savings_note mb-0">
+                    Estimate only. It excludes S3 charges, data transfer, taxes, and provider discounts.
+                </p>
+            </section>
             <div class="o_pro_dashboard_columns">
                 <section class="o_pro_panel" aria-labelledby="readiness-title">
                     <div class="o_pro_panel_header">

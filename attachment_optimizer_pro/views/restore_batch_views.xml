@@ -5,7 +5,7 @@
         <field name="name">attachment.restore.batch.tree</field>
         <field name="model">attachment.restore.batch</field>
         <field name="arch" type="xml">
-            <list create="false" import="false" export_xlsx="true">
+            <tree create="false" import="false" export_xlsx="true">
                 <field name="name"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'running'"
@@ -17,7 +17,7 @@
                 <field name="restored_display"/>
                 <field name="started_at"/>
                 <field name="finished_at"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -66,11 +66,11 @@
                     </group>
                     <group string="Processed Mappings">
                         <field name="mapping_ids" nolabel="1">
-                            <list create="false" delete="false">
+                            <tree create="false" delete="false">
                                 <field name="attachment_id"/>
                                 <field name="cleanup_state" widget="badge"/>
                                 <field name="restored_at"/>
-                            </list>
+                            </tree>
                         </field>
                     </group>
                 </sheet>
@@ -82,7 +82,7 @@
     <record id="attachment_optimizer_pro_restore_batch_action" model="ir.actions.act_window">
         <field name="name">Restore Batches</field>
         <field name="res_model">attachment.restore.batch</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help">
             Restore batches re-download verified objects from S3 to the Odoo
             filestore before rollback or uninstall.

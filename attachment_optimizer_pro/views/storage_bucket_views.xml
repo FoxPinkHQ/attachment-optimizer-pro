@@ -5,7 +5,7 @@
         <field name="name">attachment.storage.bucket.tree</field>
         <field name="model">attachment.storage.bucket</field>
         <field name="arch" type="xml">
-            <list create="true" import="false" export_xlsx="false">
+            <tree create="true" import="false" export_xlsx="false">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="provider"/>
@@ -13,7 +13,7 @@
                 <field name="endpoint_url" optional="show"/>
                 <field name="is_default"/>
                 <field name="active"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -78,7 +78,7 @@
     <record id="attachment_optimizer_pro_storage_bucket_action" model="ir.actions.act_window">
         <field name="name">Buckets</field>
         <field name="res_model">attachment.storage.bucket</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help">
             Configure S3-compatible bucket profiles for multi-bucket routing.
         </field>

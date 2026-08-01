@@ -34,10 +34,10 @@
                     </group>
                 </group>
                 <field name="mapping_ids" nolabel="1">
-                    <list>
+                    <tree>
                         <field name="attachment_id"/>
                         <field name="cleanup_state" widget="badge"/>
-                    </list>
+                    </tree>
                 </field>
                 <footer>
                     <button name="action_confirm" string="Confirm Cleanup"

@@ -5,7 +5,7 @@
         <field name="name">attachment.storage.policy.tree</field>
         <field name="model">attachment.storage.policy</field>
         <field name="arch" type="xml">
-            <list create="true" import="true" export_xlsx="true">
+            <tree create="true" import="true" export_xlsx="true">
                 <field name="name"/>
                 <field name="action" widget="badge"
                        decoration-info="action in ('migrate','archive')"
@@ -18,7 +18,7 @@
                 <field name="last_run"/>
                 <field name="last_result" optional="show"/>
                 <field name="active"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -79,7 +79,7 @@
     <record id="attachment_optimizer_pro_storage_policy_action" model="ir.actions.act_window">
         <field name="name">Lifecycle Policies</field>
         <field name="res_model">attachment.storage.policy</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help">
             Lifecycle policies automate migrating, restoring, cleaning up and
             archiving attachments on a schedule.

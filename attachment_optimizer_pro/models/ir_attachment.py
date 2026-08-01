@@ -1,6 +1,6 @@
 import logging
 
-from odoo import models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 class IrAttachment(models.Model):
     _inherit = 'ir.attachment'
 
+    @api.model_create_multi
     def create(self, vals_list):
         recs = super().create(vals_list)
         ctx = self.env.context

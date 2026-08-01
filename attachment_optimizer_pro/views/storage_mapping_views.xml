@@ -53,12 +53,12 @@
         <field name="model">attachment.migration.operation</field>
         <field name="inherit_id" ref="attachment_optimizer.attachment_optimizer_migration_operation_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//list" position="attributes">
+            <xpath expr="//tree" position="attributes">
                 <attribute name="create">false</attribute>
                 <attribute name="import">false</attribute>
                 <attribute name="export_xlsx">true</attribute>
             </xpath>
-            <xpath expr="//list" position="inside">
+            <xpath expr="//tree" position="inside">
                 <field name="bucket_id" optional="show"/>
                 <field name="routed" optional="hide"/>
             </xpath>
@@ -71,7 +71,7 @@
         <field name="model">attachment.storage.mapping</field>
         <field name="inherit_id" ref="attachment_optimizer.attachment_optimizer_storage_mapping_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//list" position="attributes">
+            <xpath expr="//tree" position="attributes">
                 <attribute name="create">false</attribute>
                 <attribute name="import">false</attribute>
                 <attribute name="export_xlsx">true</attribute>

@@ -19,7 +19,11 @@ class IrBinaryExtension(models.AbstractModel):
     ):
         if record._name == 'ir.attachment':
             try:
-                record.check_access('read')
+                check_access = getattr(record, 'check_access', None)
+                if check_access:
+                    check_access('read')
+                else:
+                    record.check('read')
             except Exception:
                 return
             mapping = self.env['attachment.storage.mapping'].sudo().search([

@@ -5,7 +5,7 @@
         <field name="name">attachment.cleanup.batch.tree</field>
         <field name="model">attachment.cleanup.batch</field>
         <field name="arch" type="xml">
-            <list create="false" import="false" export_xlsx="true">
+            <tree create="false" import="false" export_xlsx="true">
                 <field name="name"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'running'"
@@ -20,7 +20,7 @@
                 <field name="reclaimed_display"/>
                 <field name="started_at"/>
                 <field name="finished_at"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -73,11 +73,11 @@
                     </group>
                     <group string="Processed Mappings">
                         <field name="mapping_ids" nolabel="1">
-                            <list create="false" delete="false">
+                            <tree create="false" delete="false">
                                 <field name="attachment_id"/>
                                 <field name="cleanup_state" widget="badge"/>
                                 <field name="removed_at"/>
-                            </list>
+                            </tree>
                         </field>
                     </group>
                 </sheet>
@@ -89,7 +89,7 @@
     <record id="attachment_optimizer_pro_cleanup_batch_action" model="ir.actions.act_window">
         <field name="name">Cleanup Batches</field>
         <field name="res_model">attachment.cleanup.batch</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help">
             Cleanup batches reclaim local filestore space from verified,
             finalized storage mappings after the retention period.

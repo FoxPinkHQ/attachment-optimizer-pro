@@ -1,7 +1,10 @@
 .o_pro_safety_dashboard {
-    max-width: 1320px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     padding: 24px;
+    box-sizing: border-box;
+    min-height: 100%;
+    position: relative;
 }
 
 .o_pro_dashboard_header,
@@ -12,7 +15,7 @@
     gap: 16px;
 }
 
-.o_pro_dashboard_header { margin-bottom: 16px; }
+.o_pro_dashboard_header { margin-bottom: 24px; }
 .o_pro_dashboard_header h2,
 .o_pro_panel_header h3 { margin: 0; }
 .o_pro_panel_header h3 { font-size: 1rem; font-weight: 600; }
@@ -25,7 +28,7 @@
     border: 1px solid;
     border-radius: 8px;
     padding: 12px 16px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 .o_pro_readiness_banner > i { font-size: 1.35rem; }
 .o_pro_ready { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
@@ -34,13 +37,13 @@
 .o_pro_kpi_grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 .o_pro_kpi_card {
     min-width: 0;
-    min-height: 118px;
-    padding: 16px;
+    min-height: 124px;
+    padding: 20px;
     border: 1px solid #dee2e6;
     border-radius: 8px;
     background: var(--o-view-background-color, #fff);
@@ -50,10 +53,15 @@
     flex-direction: column;
     justify-content: center;
 }
-.o_pro_kpi_card strong { font-size: 1.6rem; line-height: 1.2; margin: 5px 0; }
+.o_pro_kpi_card strong {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 5px 0;
+    font-variant-numeric: tabular-nums;
+}
 .o_pro_kpi_card small,
 .o_pro_kpi_label { color: var(--o-gray-600, #6c757d); }
-.o_pro_kpi_label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+.o_pro_kpi_label { font-size: .95rem; font-weight: 600; }
 .o_pro_kpi_action { cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease; }
 .o_pro_kpi_action:hover,
 .o_pro_kpi_action:focus-visible { border-color: var(--o-brand-primary, #714b67); box-shadow: 0 0 0 3px rgba(113, 75, 103, .12); outline: 0; }
@@ -63,8 +71,8 @@
 .o_pro_kpi_danger strong { color: #dc3545; }
 
 .o_pro_savings_panel {
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 24px;
+    padding: 20px;
     border: 1px solid #bfdbfe;
     border-radius: 8px;
     background: #eff6ff;
@@ -94,8 +102,8 @@
 .o_pro_savings_metrics strong { display: block; margin-top: 4px; font-size: 1.35rem; }
 .o_pro_savings_note { color: #475569; font-size: .75rem; }
 .o_pro_assurance_panel {
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 24px;
+    padding: 20px;
     border: 1px solid #dee2e6;
     border-left: 4px solid var(--o-brand-primary, #714b67);
     border-radius: 8px;
@@ -122,12 +130,26 @@
 .o_pro_assurance_hint { margin-top: 12px; color: #854d0e; font-size: .8rem; }
 .o_pro_assurance_error { color: #b42318; }
 .o_pro_dashboard_columns { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
-.o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #dee2e6; border-radius: 8px; padding: 16px; }
+.o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; }
 .o_pro_panel_header { align-items: center; margin-bottom: 12px; }
 .o_pro_check_list { display: flex; flex-direction: column; }
 .o_pro_check { display: grid; grid-template-columns: 20px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid #eef0f2; }
 .o_pro_check:first-child { border-top: 0; }
 .o_pro_check > i { margin-top: 2px; }
+
+.o_pro_dashboard_overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    background: var(--o-view-background-color, #fff);
+    color: var(--o-gray-600, #6c757d);
+}
+.o_pro_dashboard_overlay p { margin: 12px 0 0; }
 
 @media (max-width: 1100px) {
     .o_pro_kpi_grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }

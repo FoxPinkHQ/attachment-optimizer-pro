@@ -1,10 +1,17 @@
 .o_pro_safety_dashboard {
     width: 100%;
+    max-width: none;
     margin: 0;
     padding: 24px;
     box-sizing: border-box;
     min-height: 100%;
     position: relative;
+}
+
+html .o_web_client .o_action_manager .o_pro_safety_dashboard {
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .o_pro_dashboard_header,
@@ -44,11 +51,12 @@
     min-width: 0;
     min-height: 124px;
     padding: 20px;
-    border: 1px solid #dee2e6;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     background: var(--o-view-background-color, #fff);
     color: inherit;
-    text-align: left;
+    text-align: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -60,15 +68,15 @@
     font-variant-numeric: tabular-nums;
 }
 .o_pro_kpi_card small,
-.o_pro_kpi_label { color: var(--o-gray-600, #6c757d); }
+.o_pro_kpi_label { color: #718096; }
 .o_pro_kpi_label { font-size: .95rem; font-weight: 600; }
 .o_pro_kpi_action { cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease; }
 .o_pro_kpi_action:hover,
 .o_pro_kpi_action:focus-visible { border-color: var(--o-brand-primary, #714b67); box-shadow: 0 0 0 3px rgba(113, 75, 103, .12); outline: 0; }
-.o_pro_kpi_primary strong { color: #0d6efd; }
-.o_pro_kpi_success strong { color: #198754; }
-.o_pro_kpi_danger { background: #fff5f5; border-color: #fecaca; }
-.o_pro_kpi_danger strong { color: #dc3545; }
+.o_pro_kpi_primary strong { color: #3b82f6; }
+.o_pro_kpi_success strong { color: #22c55e; }
+.o_pro_kpi_danger { background: #fef2f2; border-color: #fecaca; }
+.o_pro_kpi_danger strong { color: #ef4444; }
 
 .o_pro_savings_panel {
     margin-bottom: 24px;
@@ -104,8 +112,7 @@
 .o_pro_assurance_panel {
     margin-bottom: 24px;
     padding: 20px;
-    border: 1px solid #dee2e6;
-    border-left: 4px solid var(--o-brand-primary, #714b67);
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     background: var(--o-view-background-color, #fff);
 }
@@ -130,7 +137,7 @@
 .o_pro_assurance_hint { margin-top: 12px; color: #854d0e; font-size: .8rem; }
 .o_pro_assurance_error { color: #b42318; }
 .o_pro_dashboard_columns { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
-.o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; }
+.o_pro_panel { background: var(--o-view-background-color, #fff); border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; }
 .o_pro_panel_header { align-items: center; margin-bottom: 12px; }
 .o_pro_check_list { display: flex; flex-direction: column; }
 .o_pro_check { display: grid; grid-template-columns: 20px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid #eef0f2; }

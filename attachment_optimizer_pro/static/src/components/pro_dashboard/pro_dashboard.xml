@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
-    <t t-name="attachment_optimizer_pro.SafetyDashboard">
+    <t t-name="attachment_optimizer_pro.SafetyDashboard" owl="1">
         <div class="o_pro_safety_dashboard">
             <div class="o_pro_dashboard_header">
                 <div>

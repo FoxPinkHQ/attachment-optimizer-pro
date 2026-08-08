@@ -19,7 +19,7 @@ class TestProBranding(TransactionCase):
         )
         arch = str(view.arch_db)
         self.assertIn('Attachment Optimizer Pro', arch)
-        self.assertIn('data-key="attachment_optimizer_pro"', arch)
+        self.assertIn('<attribute name="data-key">attachment_optimizer_pro</attribute>', arch)
         action = self.env.ref(
             'attachment_optimizer.attachment_optimizer_settings_action'
         )

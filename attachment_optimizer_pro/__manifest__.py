@@ -1,6 +1,6 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "15.0.1.0.15",
+    "version": "15.0.1.0.16",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """
@@ -42,10 +42,15 @@
         "data/pro_params.xml",
         "data/pro_cron.xml",
     ],
+    "qweb": [
+        "static/src/components/pro_dashboard/pro_dashboard.xml",
+    ],
     "assets": {
-        "web.assets_backend": [
-            "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.js",
+        "web.assets_qweb": [
             "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.xml",
+        ],
+        "web.assets_backend": [
+            "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard_legacy.js",
             "attachment_optimizer_pro/static/src/components/pro_dashboard/pro_dashboard.scss",
         ],
     },

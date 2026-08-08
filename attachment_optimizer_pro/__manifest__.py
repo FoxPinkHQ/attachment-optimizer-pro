@@ -1,6 +1,6 @@
 {
     "name": "Attachment Optimizer Pro",
-    "version": "14.0.1.0.14",
+    "version": "14.0.1.0.15",
     "category": "Storage",
     "summary": "Automation, cleanup, routing and lifecycle for S3-compatible attachment storage.",
     "description": """

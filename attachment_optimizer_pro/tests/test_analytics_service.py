@@ -133,7 +133,7 @@ class TestAnalyticsService(TransactionCase):
             'notification_type': 'email',
             'company_id': self.env.company.id,
             'company_ids': [(6, 0, [self.env.company.id])],
-            'group_ids': [(6, 0, [
+            'groups_id': [(6, 0, [
                 self.env.ref('base.group_user').id,
                 manager_group.id,
             ])],

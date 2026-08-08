@@ -2,6 +2,10 @@
 <templates xml:space="preserve">
     <t t-name="attachment_optimizer_pro.SafetyDashboard" owl="1">
         <div class="o_pro_safety_dashboard">
+            <div t-if="state.loading" class="o_pro_dashboard_overlay" role="status" aria-live="polite">
+                <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"/>
+                <p>Loading Dashboard…</p>
+            </div>
             <div class="o_pro_dashboard_header">
                 <div>
                     <h2>Safety &amp; Savings</h2>

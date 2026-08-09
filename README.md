@@ -8,7 +8,7 @@ Only update product content, version, links, compatibility status, screenshots, 
 
 ![Attachment Optimizer Pro](attachment_optimizer_pro/static/description/preview.png)
 
-**Version:** 17.0.1.0.20 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0-19.0** (one validated build per series)
+**Version:** 17.0.1.0.21 -- **License:** OPL-1 -- **Publisher:** FoxPink -- Maintained for **Odoo 14.0-19.0** (one validated build per series)
 
 ---
 

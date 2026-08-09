@@ -8,20 +8,20 @@
             </div>
             <div class="o_pro_dashboard_header">
                 <div>
-                    <h2>Safety &amp; Savings</h2>
-                    <p class="text-muted mb-0">Verified storage, reclaimable local space, and cleanup readiness.</p>
+                    <h2>Storage Optimization</h2>
+                    <p class="text-muted mb-0">Migration overview with Pro cleanup safety, recovery evidence, and savings controls.</p>
                 </div>
                 <div class="o_pro_dashboard_actions">
-                    <button class="btn btn-outline-secondary" type="button"
+                    <button class="btn btn-secondary" type="button"
                             t-on-click="load" t-att-disabled="state.loading"
                             aria-label="Refresh safety and savings dashboard">
-                        <i t-att-class="'fa ' + (state.loading ? 'fa-spinner fa-spin' : 'fa-refresh')"/>
+                        <i t-att-class="'fa ' + (state.loading ? 'fa-spinner fa-spin' : 'fa-refresh')" aria-hidden="true"/>
                         Refresh
                     </button>
                     <button class="btn btn-primary" type="button"
                             t-on-click="onRunReadiness" t-att-disabled="state.checking"
                             aria-label="Run live cleanup readiness check">
-                        <i t-att-class="'fa ' + (state.checking ? 'fa-spinner fa-spin' : 'fa-shield')"/>
+                        <i t-att-class="'fa ' + (state.checking ? 'fa-spinner fa-spin' : 'fa-shield')" aria-hidden="true"/>
                         Run Live Check
                     </button>
                 </div>
@@ -30,7 +30,7 @@
             <div class="o_pro_readiness_banner"
                  t-att-class="state.readiness.ready ? 'o_pro_ready' : 'o_pro_attention'"
                  role="status">
-                <i t-att-class="'fa ' + (state.readiness.ready ? 'fa-check-circle' : 'fa-exclamation-triangle')"/>
+                <i t-att-class="'fa ' + (state.readiness.ready ? 'fa-check-circle' : 'fa-exclamation-triangle')" aria-hidden="true"/>
                 <div>
                     <strong t-esc="state.readiness.ready ? 'Ready for safe cleanup' : 'Review cleanup readiness'"/>
                     <div class="small">
@@ -42,34 +42,42 @@
 
             <div class="o_pro_kpi_grid" aria-label="Storage lifecycle metrics">
                 <div class="o_pro_kpi_card">
-                    <span class="o_pro_kpi_label">Local storage analyzed</span>
-                    <strong t-esc="state.analytics.total_display"/>
+                    <strong t-esc="state.analytics.total_attachments"/>
+                    <span class="o_pro_kpi_label">Stored Attachments</span>
+                    <small t-esc="state.analytics.total_display"/>
                 </div>
                 <div class="o_pro_kpi_card">
-                    <span class="o_pro_kpi_label">Verified on S3</span>
-                    <strong t-esc="state.analytics.migrated_display"/>
-                    <small><t t-esc="state.analytics.migrated"/> attachment(s)</small>
+                    <strong class="o_pro_value_success" t-esc="state.analytics.migrated"/>
+                    <span class="o_pro_kpi_label">Verified S3 Copy</span>
+                    <small><t t-esc="state.analytics.migrated_display"/> protected</small>
                 </div>
                 <button class="o_pro_kpi_card o_pro_kpi_action o_pro_kpi_primary"
                         type="button" t-on-click="onViewReclaimable">
-                    <span class="o_pro_kpi_label">Reclaimable now</span>
                     <strong t-esc="state.analytics.reclaimable_display"/>
+                    <span class="o_pro_kpi_label">Reclaimable Now</span>
                     <small><t t-esc="state.analytics.reclaimable"/> eligible attachment(s)</small>
                 </button>
                 <button class="o_pro_kpi_card o_pro_kpi_action o_pro_kpi_success"
                         type="button" t-on-click="onViewReclaimed">
-                    <span class="o_pro_kpi_label">Local space reclaimed</span>
                     <strong t-esc="state.analytics.reclaimed_display"/>
+                    <span class="o_pro_kpi_label">Local Space Reclaimed</span>
                     <small><t t-esc="state.analytics.reclaimed"/> attachment(s)</small>
                 </button>
                 <button class="o_pro_kpi_card o_pro_kpi_action"
                         t-att-class="state.analytics.failed ? 'o_pro_kpi_danger' : ''"
                         type="button" t-on-click="onViewFailed">
-                    <span class="o_pro_kpi_label">Failed operations</span>
                     <strong t-esc="state.analytics.failed"/>
+                    <span class="o_pro_kpi_label">Failed Operations</span>
                     <small>Open failure queue</small>
                 </button>
             </div>
+
+            <section class="o_pro_section_intro" aria-labelledby="pro-controls-title">
+                <div>
+                    <h3 id="pro-controls-title">Pro safety controls</h3>
+                    <p class="text-muted mb-0">These controls extend the migration workflow above; they never replace its verified-copy baseline.</p>
+                </div>
+            </section>
 
             <section class="o_pro_savings_panel" aria-labelledby="savings-title">
                 <div class="o_pro_savings_intro">

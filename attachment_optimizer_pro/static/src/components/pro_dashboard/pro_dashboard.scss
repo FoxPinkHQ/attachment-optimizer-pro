@@ -70,6 +70,7 @@ html .o_web_client .o_action_manager .o_pro_safety_dashboard {
 .o_pro_kpi_card small,
 .o_pro_kpi_label { color: #718096; }
 .o_pro_kpi_label { font-size: .95rem; font-weight: 600; }
+.o_pro_value_success { color: #22c55e; }
 .o_pro_kpi_action { cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease; }
 .o_pro_kpi_action:hover,
 .o_pro_kpi_action:focus-visible { border-color: var(--o-brand-primary, #714b67); box-shadow: 0 0 0 3px rgba(113, 75, 103, .12); outline: 0; }
@@ -77,6 +78,17 @@ html .o_web_client .o_action_manager .o_pro_safety_dashboard {
 .o_pro_kpi_success strong { color: #22c55e; }
 .o_pro_kpi_danger { background: #fef2f2; border-color: #fecaca; }
 .o_pro_kpi_danger strong { color: #ef4444; }
+
+.o_pro_section_intro {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 32px 0 16px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+}
+.o_pro_section_intro h3 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; }
 
 .o_pro_savings_panel {
     margin-bottom: 24px;
